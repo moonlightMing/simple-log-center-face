@@ -1,18 +1,58 @@
-import React from 'react'
+import React from 'react';
 import { Tree, Input } from 'antd';
+import { HashRouter as Router } from 'react-router-dom';
+import axios from 'axios';
 
 const { TreeNode } = Tree;
 const Search = Input.Search;
 
 const gData = [
-    {key:"qwe", title:"title", children:[
-        {key:"asd", title:"asd", children:[
-            {key:"zxc", title:"zxc"}
-        ]}
-    ]}
+  // {
+  //   "title": "local",
+  //   "key": "local",
+  //   "children": [
+  //     {
+  //       "title": "192.168.31.70",
+  //       "key": "192.168.31.70",
+  //       "children": null
+  //     },
+  //     {
+  //       "title": "192.168.1.230",
+  //       "key": "192.168.1.230",
+  //       "children": null
+  //     },
+  //     {
+  //       "title": "127.0.0.1",
+  //       "key": "127.0.0.1",
+  //       "children": null
+  //     }
+  //   ]
+  // },
+  // {
+  //   "title": "6kw",
+  //   "key": "6kw",
+  //   "children": [
+  //     {
+  //       "title": "192.168.31.70",
+  //       "key": "192.168.31.70",
+  //       "children": null
+  //     },
+  //     {
+  //       "title": "192.168.1.230",
+  //       "key": "192.168.1.230",
+  //       "children": null
+  //     },
+  //     {
+  //       "title": "127.0.0.1",
+  //       "key": "127.0.0.1",
+  //       "children": null
+  //     }
+  //   ]
+  // }
 ];
 
 const dataList = [];
+
 const generateList = (data) => {
   for (let i = 0; i < data.length; i++) {
     const node = data[i];
@@ -23,8 +63,7 @@ const generateList = (data) => {
     }
   }
 };
-generateList(gData);
-console.log(gData)
+
 const getParentKey = (key, tree) => {
   let parentKey;
   for (let i = 0; i < tree.length; i++) {
@@ -40,6 +79,20 @@ const getParentKey = (key, tree) => {
   return parentKey;
 };
 
+const getHostList = (data) => {
+  axios.get("/listAllHosts").then((res) => {
+    let result = res.data.result;
+    result.map((value, index, array) => {
+      data.push(value)
+      return index
+    })
+    return data
+  })
+};
+
+getHostList(gData)
+generateList(gData)
+
 export default class ControllerList extends React.Component {
   state = {
     expandedKeys: [],
@@ -48,7 +101,7 @@ export default class ControllerList extends React.Component {
   }
 
   componentWillMount() {
-    
+
   }
 
   onExpand = (expandedKeys) => {
@@ -88,23 +141,25 @@ export default class ControllerList extends React.Component {
       ) : <span>{item.title}</span>;
       if (item.children) {
         return (
-          <TreeNode style={{"textAlign": "left"}} key={item.key} title={title}>
+          <TreeNode style={{ "textAlign": "left" }} key={item.key} title={title}>
             {loop(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode style={{"textAlign": "left"}} key={item.key} title={title} />;
+      return <TreeNode style={{ "textAlign": "left" }} key={item.key} title={title} />;
     });
     return (
       <div>
         <Search style={{ marginBottom: 8, padding: 5 }} placeholder="Search" onChange={this.onChange} />
-        <Tree
-          onExpand={this.onExpand}
-          expandedKeys={expandedKeys}
-          autoExpandParent={autoExpandParent}
-        >
-          {loop(gData)}
-        </Tree>
+        <Router>
+          <Tree
+            onExpand={this.onExpand}
+            expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+          >
+            {loop(gData)}
+          </Tree>
+        </Router>
       </div>
     );
   }

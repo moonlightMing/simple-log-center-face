@@ -4,6 +4,7 @@
     padding: 2%;
     height: 100%;
     text-align: left;
+    position: relative;
 }
 
 .nav-hader {
@@ -15,8 +16,12 @@
     padding-left: 2%;
 }
 
-.window {
+.spin {
     height: 90%;
-    width: 100%;
     overflow: auto;
+}
+
+.window {
+    height: 100%;
+    width: 100%;
 }

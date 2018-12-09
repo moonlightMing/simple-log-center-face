@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Layout } from 'antd';
+import { Layout } from 'antd';
 import './App.css';
 
 import ControllerList from './components/ControllerList'
 import FileWindow from './components/FileWindow'
 const {
-  Header, Sider, Content,
+  Sider, Content,
 } = Layout;
 
 
@@ -18,9 +18,6 @@ class App extends Component {
             <ControllerList />
           </Sider>
           <Layout>
-            {/* <Header>
-              <Button >点击一下</Button>
-            </Header> */}
             <Content className="content">
               <FileWindow/>
             </Content>

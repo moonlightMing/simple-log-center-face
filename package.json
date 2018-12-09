@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.11.0",
+    "axios": "^0.18.0",
     "babel-plugin-import": "^1.11.0",
     "less": "2.7.3",
     "less-loader": "^4.1.0",
@@ -28,5 +29,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "proxy": "http://localhost:9090"
 }
