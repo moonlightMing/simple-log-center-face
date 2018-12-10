@@ -79,30 +79,35 @@ const getParentKey = (key, tree) => {
   return parentKey;
 };
 
-const getHostList = (data) => {
-  axios.get("/listAllHosts").then((res) => {
-    let result = res.data.result;
-    result.map((value, index, array) => {
-      data.push(value)
-      return index
-    })
-    return data
-  })
-};
 
-getHostList(gData)
-generateList(gData)
+// getHostList(gData)
+
 
 export default class ControllerList extends React.Component {
   state = {
     expandedKeys: [],
     searchValue: '',
     autoExpandParent: true,
+    gData: []
   }
 
   componentWillMount() {
-
+    this.getHostList(this.state.gData)
+    generateList(this.state.gData)
+    this.setState({
+      gData
+    })
   }
+
+  getHostList = (data) => {
+    axios.get("/listAllHosts").then((res) => {
+      let result = res.data.result;
+      result.map((value, index, array) => {
+        data.push(value)
+        return index
+      })
+    })
+  };
 
   onExpand = (expandedKeys) => {
     this.setState({
