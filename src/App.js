@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import './App.css';
 
-import ControllerList from './components/ControllerList'
+import SearchTree from './components/ControllerList/SearchTree'
 import FileWindow from './components/FileWindow'
 const {
   Sider, Content,
@@ -15,7 +15,7 @@ class App extends Component {
       <div className="App">
         <Layout className="layout">
           <Sider className="sider">
-            <ControllerList />
+            <SearchTree />
           </Sider>
           <Layout>
             <Content className="content">
