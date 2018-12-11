@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import './App.css';
 
-import SearchTree from './components/ControllerList/SearchTree'
+import SearchTree from './components/SearchTree'
 import FileWindow from './components/FileWindow'
 const {
   Sider, Content,
