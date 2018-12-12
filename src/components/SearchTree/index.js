@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tree, Input } from 'antd';
+import { Modal, Tree, Input } from 'antd';
 import Axios from 'axios';
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -48,6 +48,11 @@ export default class SearchTree extends React.Component {
       .then((res) => {
         this.setState({
           gData: res.data.result
+        })
+      }).catch(()=>{
+        Modal.error({
+          title: 'ERR_CODE 504',
+          content: '网络连接错误',
         })
       })
   }
@@ -129,7 +134,7 @@ export default class SearchTree extends React.Component {
       <div style={{ textAlign: "left" }}>
         <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
         <Tree
-          onSelect={this.onSelect}
+          // onSelect={this.onSelect}
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
