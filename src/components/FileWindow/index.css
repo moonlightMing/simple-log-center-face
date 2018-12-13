@@ -18,7 +18,8 @@
 
 .spin {
     height: 90%;
-    overflow: auto;
+    padding: 15px;
+    overflow-y: auto;
 }
 
 .window {

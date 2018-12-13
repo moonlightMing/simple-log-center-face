@@ -7,24 +7,28 @@ export default class DirRouter extends React.Component {
         host: '',
         routes: [
             {
-                path:"data",
+                path: "data",
                 breadcrumbName: "data"
             },
             {
-                path:"qwe",
+                path: "qwe",
                 breadcrumbName: "qwe"
+            },
+            {
+                path: "asd",
+                breadcrumbName: "asd"
             }
         ]
     }
 
     itemRender = (route, params, routes, paths) => {
         const last = routes.indexOf(route) === routes.length - 1;
-        console.log(route)
-        console.log(routes)
-        console.log(paths)
-        return last ? <span>{route.breadcrumbName}</span> : <Link to={paths.join('/')}>{route.breadcrumbName}</Link>;
-      }
-      
+        // console.log(route)
+        // console.log(routes)
+        // console.log(paths)
+        return last ? <span>{route.breadcrumbName}</span> : <Link to={"/filepath/" + paths.join('/')}>{route.breadcrumbName}</Link>;
+    }
+
 
     render() {
         return (
@@ -35,6 +39,5 @@ export default class DirRouter extends React.Component {
             </Fragment>
         )
     }
-
 
 }

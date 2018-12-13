@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import './App.css';
 
-import SearchTree from './components/SearchTree'
-import FileWindow from './components/FileWindow'
+import SearchTree from '/components/SearchTree'
+import FileWindow from '/components/FileWindow'
 const {
   Sider, Content,
 } = Layout;

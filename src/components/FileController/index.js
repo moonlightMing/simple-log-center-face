@@ -1,5 +1,6 @@
-import React from 'react';
-import { List, Card } from 'antd';
+import React, { Fragment } from 'react';
+import { List, Card, Button, Icon } from 'antd';
+import { FileListGrid } from '@/component/FileListGrid';
 
 export default class FileController extends React.Component {
 
@@ -8,8 +9,8 @@ export default class FileController extends React.Component {
         this.state = {
             displayHost: '',
             displayDir: '',
-            // grid: { gutter: 5, column: 5 },
-            grid: {},
+            listStyle:'',
+            grid: null,
             data: [
                 {
                     name: "qdsdf.log",
@@ -25,21 +26,52 @@ export default class FileController extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.match.params)
+        console.log(this.props.match.params.dir)
+    }
+
+    changeListStyle(listStyle) {
+        // grid
+        if (listStyle === "grid") {
+            this.setState({
+                grid: {}
+            })
+        } else {
+            this.setState({
+                grid: { gutter: 12, column: 10 }
+            })
+        }
+    }
+
+    onClick() {
+        if (this.state.listStyle === 'grid') {
+            this.setState({
+                listStyle:"list"
+            })
+        } 
+
+        if (this.state.listStyle === 'list') {
+            this.setState({
+                listStyle:"grid"
+            })
+        } 
+
+        changeListStyle(this.state.listStyle)
     }
 
     render() {
         return (
-            <List
-                grid={this.state.grid}
-                dataSource={this.state.data}
-                renderItem={item => (
-                    <List.Item>
-                        {/* <Card title={item.name}>Card content</Card> */}
-                        hello
-                    </List.Item>
-                )}
-            />
+            <Fragment>
+                <Button onClick={this.onClick.bind(this)} />
+                <List
+                    grid={this.state.grid}
+                    dataSource={this.state.data}
+                    renderItem={item => (
+                        <List.Item>
+                            <FileListGrid/>
+                        </List.Item>
+                    )}
+                />
+            </Fragment>
         );
     }
 }
