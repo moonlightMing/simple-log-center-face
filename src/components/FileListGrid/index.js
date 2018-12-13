@@ -1,29 +1,22 @@
 import React from 'react';
 import { Icon } from 'antd';
 
-export default class FileListGrid extends React.component {
-
-    constructor(props) {
-        super(props)
-    }
+export default class FileListGrid extends React.Component {
 
     render() {
-
-
-
         return (
-            <span>
-                <span className="icon">
+            <div className="wrapper">
+                <div className="icon">
                     {
-                        this.props.fileType === "file" ? <Icon type="file-text" /> : <Icon type="folder-open" />
+                        this.props.fileType === 0 ? <Icon alt="xcvsd" theme="filled" type="file-text" /> : <Icon theme="filled" type="folder-open" />
                     }
-                </span>
+                </div>
                 <span className="filename">
                     <span>
                         {this.props.title}
                     </span>
                 </span>
-            </span>
+            </div>
         )
     }
 }

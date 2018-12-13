@@ -1,7 +1,16 @@
-.icon {
-
+.wrapper {
+    border-radius: 3px;
+    height: 100px;
+    width: 100px;
+    border: 1px solid red;
 }
 
-.name {
-    
+.icon {
+    width: 100px;
+    height: 100px;
+}
+
+.filename {
+    width: 100%;
+    text-align: center;
 }
