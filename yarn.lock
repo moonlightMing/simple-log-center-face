@@ -10709,6 +10709,11 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
+sockette@^2.0.5:
+  version "2.0.5"
+  resolved "http://registry.npm.taobao.org/sockette/download/sockette-2.0.5.tgz#e72cc2958e5a11a1aa49bc9a052093650b8de5d3"
+  integrity sha1-5yzClY5aEaGqSbyaBSCTZQuN5dM=
+
 sockjs-client@1.1.5:
   version "1.1.5"
   resolved "http://registry.npm.taobao.org/sockjs-client/download/sockjs-client-1.1.5.tgz#1bb7c0f7222c40f42adf14f4442cbd1269771a83"

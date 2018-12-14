@@ -4,6 +4,7 @@ import { Skeleton, Spin } from 'antd';
 import "./index.css";
 import FileController from '../FileController'
 import DirRouter from '../DirRouter'
+import LogWindow from '../FileWindow'
 
 export default class FileWindow extends React.Component {
     // constructor(props) {
@@ -36,7 +37,7 @@ export default class FileWindow extends React.Component {
                     </div>
                     <Spin spinning={false} size="large" wrapperClassName="spin">
                         <div className="window">
-                            <Route exact={true} path="/" component={Skeleton}></Route>
+                            <Route exact={true} path="/" component={LogWindow}></Route>
                             <Route path="/filepath/:dir" component={FileController}></Route>
                         </div>
                     </Spin>
