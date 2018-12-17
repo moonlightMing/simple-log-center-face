@@ -1,6 +1,8 @@
 import React from 'react';
 import { Modal, Tree, Input } from 'antd';
 import Axios from 'axios';
+import { connect } from 'react-redux';
+
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
 
@@ -35,7 +37,7 @@ const generateList = (data) => {
 /*对于异步加载的子节点使用该key进行自增赋值*/
 let key = 10;
 
-export default class SearchTree extends React.Component {
+class SearchTree extends React.Component {
   state = {
     expandedKeys: ['1'],
     searchValue: '',
@@ -49,12 +51,13 @@ export default class SearchTree extends React.Component {
         this.setState({
           gData: res.data.result
         })
-      }).catch(()=>{
-        Modal.error({
-          title: 'ERR_CODE 504',
-          content: '网络连接错误',
-        })
       })
+      // .catch(()=>{
+      //   Modal.error({
+      //     title: 'ERR_CODE 504',
+      //     content: '网络连接错误',
+      //   })
+      // })
   }
 
   onSelect = (selectedKeys, info) => {
@@ -146,3 +149,17 @@ export default class SearchTree extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    gData: state.gData
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchTree);

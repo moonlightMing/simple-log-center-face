@@ -1,20 +1,30 @@
 import React from 'react';
 import { Button } from 'antd';
-export default class ListStyleBtn extends React.Component {
+import { connect } from 'react-redux';
 
-    constructor(props) {
-        super(props)
-        this.onClick = this.onClick.bind(this)
-    }
+const ListStyleBtn = (props) => {
+    const { isGrid, changeListStyle } = props;
+    return (
+        // 按钮图标应与实际状态相反
+        <Button style={{ marginLeft: "auto", marginRight: "2px" }} onClick={changeListStyle} icon={isGrid ? "ordered-list" : "table"} />
+    )
+}
 
-    onClick () {
-        
-    }
-
-
-    render () {
-        return (
-            <Button onClick={this.onClick} icon={this.state.isGrid ? "table" : "ordered-list"} />
-        )
+const mapStateToProps = (state) => {
+    return {
+        isGrid: state.isGrid
     }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeListStyle(e) {
+            const action = {
+                type: 'CHANGE_LIST_STYLE'
+            }
+            dispatch(action)
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListStyleBtn);
