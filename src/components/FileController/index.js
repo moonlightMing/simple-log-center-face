@@ -10,8 +10,6 @@ class FileController extends React.Component {
         this.state = {
             displayHost: '',
             displayDir: '',
-            isGrid: true,
-            grid: null,
             data: [
                 {
                     "name": "q3esfd",
@@ -109,8 +107,8 @@ class FileController extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isGrid: state.isGrid,
-        grid: state.grid
+        isGrid: state.logWindow.isGrid,
+        grid: state.logWindow.grid
     }
 }
 

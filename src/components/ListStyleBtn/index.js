@@ -12,7 +12,7 @@ const ListStyleBtn = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        isGrid: state.isGrid
+        isGrid: state.logWindow.isGrid
     }
 }
 
