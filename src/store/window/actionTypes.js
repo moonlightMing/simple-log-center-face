@@ -1,0 +1,1 @@
+export const CHANGE_LIST_STYLE = 'logWindow/CHANGE_LIST_STYLE';

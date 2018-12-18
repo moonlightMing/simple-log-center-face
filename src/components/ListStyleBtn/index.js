@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
+import * as actionCreators from '../../store/window/actionCreators';
 
 const ListStyleBtn = (props) => {
     const { isGrid, changeListStyle } = props;
@@ -19,10 +20,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         changeListStyle(e) {
-            const action = {
-                type: 'CHANGE_LIST_STYLE'
-            }
-            dispatch(action)
+            dispatch(actionCreators.changeListStyle())
         }
     }
 }
