@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Tree, Input } from 'antd';
 import Axios from 'axios';
 import { connect } from 'react-redux';
+import * as actionCreators from '../../store/hostTree/actionCreators';
 
 const TreeNode = Tree.TreeNode;
 const Search = Input.Search;
@@ -152,13 +153,15 @@ class SearchTree extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    gData: state.gData
+    gData: state.getIn(['hostTree', 'hostList'])
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    
+    initHostList (e) {
+      dispatch(actionCreators.initHostList())
+    }
   }
 }
 

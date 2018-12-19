@@ -107,8 +107,8 @@ class FileController extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isGrid: state.logWindow.isGrid,
-        grid: state.logWindow.grid
+        isGrid: state.getIn(['logWindow', 'isGrid']),
+        grid: state.getIn(['logWindow', 'grid'])
     }
 }
 

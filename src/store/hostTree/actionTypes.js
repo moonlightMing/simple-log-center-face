@@ -1,0 +1,1 @@
+export const INIT_HOST_LIST = 'hostTree/INIT_HOST_LIST';
