@@ -1,10 +1,11 @@
 import React from 'react';
-import { Modal, Tree, Input } from 'antd';
+import { Modal, Tree, Input, Icon } from 'antd';
 import Axios from 'axios';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/hostTree/actionCreators';
 
-const TreeNode = Tree.TreeNode;
+const DirectoryTree = Tree.DirectoryTree;
+const { TreeNode } = Tree;
 const Search = Input.Search;
 
 const getParentKey = (title, tree) => {
@@ -53,12 +54,12 @@ class SearchTree extends React.Component {
           gData: res.data.result
         })
       })
-      // .catch(()=>{
-      //   Modal.error({
-      //     title: 'ERR_CODE 504',
-      //     content: '网络连接错误',
-      //   })
-      // })
+    // .catch(()=>{
+    //   Modal.error({
+    //     title: 'ERR_CODE 504',
+    //     content: '网络连接错误',
+    //   })
+    // })
   }
 
   onSelect = (selectedKeys, info) => {
@@ -72,6 +73,14 @@ class SearchTree extends React.Component {
       expandedKeys,
       autoExpandParent: false,
     });
+  };
+
+  onDoubleClick(c,node) {
+    console.log(c)
+    console.log(node)
+    if (node.isLeaf()) {
+      console.log(node.props.title.props.children[2])
+    }
   };
 
   onChange = (e) => {
@@ -103,32 +112,13 @@ class SearchTree extends React.Component {
     ) : <span>{item.title}</span>;
     if (item.children) {
       return (
-        <TreeNode key={item.key} title={title} dataRef={item}>
+        <TreeNode icon={<Icon type="home" />} key={item.key} title={title}  >
           {this.loop(item.children)}
         </TreeNode>
       );
     }
-    return <TreeNode dataRef={item} key={item.key} title={title} />;
+    return <TreeNode icon={<Icon type="desktop" />} key={item.key} title={title} isLeaf />;
   });
-
-  onLoadData = (treeNode) => {
-    return new Promise((resolve) => {
-      if (treeNode.props.children) {
-        resolve();
-        return;
-      }
-      setTimeout(() => {
-        treeNode.props.dataRef.children = [
-          { title: 'Child', key: (++key + '') },
-          { title: 'Child', key: (++key + '') },
-        ];
-        this.setState({
-          gData: [...this.state.gData],
-        });
-        resolve();
-      }, 1000);
-    });
-  };
 
   render() {
     const { expandedKeys, autoExpandParent, gData } = this.state;
@@ -137,15 +127,16 @@ class SearchTree extends React.Component {
     return (
       <div style={{ textAlign: "left" }}>
         <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
-        <Tree
-          // onSelect={this.onSelect}
+        <DirectoryTree 
+          expandAction="doubleClick"
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
-        // loadData={this.onLoadData}
+          // onSelect={this.onClick}
+          onDoubleClick={this.onDoubleClick}
         >
           {this.loop(gData)}
-        </Tree>
+        </DirectoryTree>
       </div>
     );
   }
@@ -159,7 +150,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    initHostList (e) {
+    initHostList(e) {
       dispatch(actionCreators.initHostList())
     }
   }
