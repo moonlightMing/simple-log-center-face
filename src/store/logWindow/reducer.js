@@ -5,7 +5,9 @@ import {
 
 const defaultState = fromJS({
     isGrid: false,
-    grid: null
+    grid: null,
+    watchHost: "",
+    isOpenWindow: false,
 });
 
 export default (state = defaultState, action) => {
@@ -15,7 +17,6 @@ export default (state = defaultState, action) => {
             if (state.get('isGrid')) {
                 return state.set('isGrid', false)
                     .set('grid', null)
-
             } else {
                 return state.set('isGrid', true)
                     .set('grid', {
@@ -23,6 +24,10 @@ export default (state = defaultState, action) => {
                         column: 10
                     })
             }
+        case actionTypes.CHANGE_WATCH_HSOT:
+            return state.set('watchHost', action.host)
+        case actionTypes.OPEN_LOG_WINDOW:
+            return state.set('isOpenWindow', true)
         default:
             return state
     }

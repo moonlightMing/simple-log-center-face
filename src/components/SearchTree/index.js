@@ -2,7 +2,8 @@ import React from 'react';
 import { Modal, Tree, Input, Icon } from 'antd';
 import Axios from 'axios';
 import { connect } from 'react-redux';
-import * as actionCreators from '../../store/hostTree/actionCreators';
+import * as hostTreeActionCreators from '../../store/hostTree/actionCreators';
+import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 
 const DirectoryTree = Tree.DirectoryTree;
 const { TreeNode } = Tree;
@@ -62,11 +63,11 @@ class SearchTree extends React.Component {
     // })
   }
 
-  onSelect = (selectedKeys, info) => {
-    /*用于打开该节点的详细信息*/
-    console.log('selected', selectedKeys, info);
-    console.log(this.state.expandedKeys);
-  };
+  // onSelect = (selectedKeys, info) => {
+  //   /*用于打开该节点的详细信息*/
+  //   console.log('selected', selectedKeys, info);
+  //   console.log(this.state.expandedKeys);
+  // };
 
   onExpand = (expandedKeys) => {
     this.setState({
@@ -75,11 +76,13 @@ class SearchTree extends React.Component {
     });
   };
 
-  onDoubleClick(c,node) {
-    console.log(c)
-    console.log(node)
+  onDoubleClick(e,node) {
     if (node.isLeaf()) {
-      console.log(node.props.title.props.children[2])
+      const host = node.props.title.props.children[2];
+      this.props.changeWatchHost(host)
+      if (!this.props.isOpenWindow) {
+        this.props.OpenLogWindow()
+      }
     }
   };
 
@@ -133,7 +136,7 @@ class SearchTree extends React.Component {
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
           // onSelect={this.onClick}
-          onDoubleClick={this.onDoubleClick}
+          onDoubleClick={this.onDoubleClick.bind(this)}
         >
           {this.loop(gData)}
         </DirectoryTree>
@@ -144,14 +147,19 @@ class SearchTree extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    gData: state.getIn(['hostTree', 'hostList'])
+    gData: state.getIn(['hostTree', 'hostList']),
+    isOpenWindow: state.getIn(['logWindow', 'isOpenWindow'])
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    initHostList(e) {
-      dispatch(actionCreators.initHostList())
+    changeWatchHost(host) {
+      console.log(host)
+      dispatch(logWindowActionCreators.changeWatchHostAction(host))
+    },
+    OpenLogWindow() {
+      dispatch(logWindowActionCreators.openLogWindowAction())
     }
   }
 }

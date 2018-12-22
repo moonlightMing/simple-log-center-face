@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
-
-export default class DirRouter extends React.Component {
+import { connect } from 'react-redux';
+class DirRouter extends React.Component {
     state = {
-        host: '',
         routes: [
             {
                 path: "data",
@@ -31,13 +30,27 @@ export default class DirRouter extends React.Component {
 
 
     render() {
+        const { host } = this.props;
         return (
             <Fragment>
-                <span>{this.state.host}</span>
+                <span>({host})</span>
                 <Breadcrumb routes={this.state.routes} itemRender={this.itemRender}>
                 </Breadcrumb>
             </Fragment>
         )
     }
-
 }
+
+const mapStateToProps = (state) => {
+    return {
+        host: state.getIn(['logWindow', 'watchHost']) 
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DirRouter);
