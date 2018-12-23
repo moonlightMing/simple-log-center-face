@@ -6,7 +6,7 @@ import * as actionCreators from '../../store/logWindow/actionCreators';
 const ListStyleBtn = (props) => {
     const { isGrid, isOpenWindow, changeListStyle } = props;
     // 按钮图标应与实际状态相反
-    return isOpenWindow ? <Button style={{ marginLeft: "auto", marginRight: "2px" }} onClick={changeListStyle} icon={isGrid ? "ordered-list" : "table"} /> : null;
+    return props.match.params.host ? <Button style={{ marginLeft: "auto", marginRight: "2px" }} onClick={changeListStyle} icon={isGrid ? "ordered-list" : "table"} /> : null;
 }
 
 const mapStateToProps = (state) => {

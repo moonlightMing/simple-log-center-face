@@ -12,3 +12,8 @@ export const changeWatchHostAction = (host) => ({
 export const openLogWindowAction = () => ({
     type: actionTypes.OPEN_LOG_WINDOW
 })
+
+export const changeRouter = (routers) => ({
+  type: actionTypes.CHANGE_ROUTER,
+  routers
+})

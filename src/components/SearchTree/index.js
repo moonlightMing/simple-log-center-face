@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Tree, Input, Icon } from 'antd';
+import { Linkm, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import { connect } from 'react-redux';
 import * as hostTreeActionCreators from '../../store/hostTree/actionCreators';
@@ -79,10 +80,8 @@ class SearchTree extends React.Component {
   onDoubleClick(e,node) {
     if (node.isLeaf()) {
       const host = node.props.title.props.children[2];
-      this.props.changeWatchHost(host)
-      if (!this.props.isOpenWindow) {
-        this.props.OpenLogWindow()
-      }
+      // this.props.changeWatchHost(host)
+      this.props.history.push("/ip/"+host+"/filepath?dir=/data");
     }
   };
 
@@ -115,8 +114,8 @@ class SearchTree extends React.Component {
     ) : <span>{item.title}</span>;
     if (item.children) {
       return (
-        <TreeNode icon={<Icon type="home" />} key={item.key} title={title}  >
-          {this.loop(item.children)}
+        <TreeNode icon={<Icon type="home" />} key={item.key} title={title} >
+            {this.loop(item.children)}
         </TreeNode>
       );
     }
@@ -164,4 +163,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchTree);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SearchTree));

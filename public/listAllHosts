@@ -1,0 +1,57 @@
+{
+    "result": [
+        {
+            "title": "local",
+            "key": "local",
+            "children": [
+                {
+                    "title": "192.168.31.70",
+                    "key": "0-0",
+                    "children": null
+                },
+                {
+                    "title": "192.168.1.21",
+                    "key": "0-1",
+                    "children": null
+                },
+                {
+                    "title": "127.0.0.1",
+                    "key": "0-2",
+                    "children": null
+                }
+            ]
+        },
+        {
+            "title": "6kw",
+            "key": "6kw",
+            "children": [
+                {
+                    "title": "192.168.31.71",
+                    "key": "1-0",
+                    "children": null
+                },
+                {
+                    "title": "192.168.1.230",
+                    "key": "1-1",
+                    "children": null
+                }
+            ]
+        },
+        {
+            "title": "xyxmh",
+            "key": "xyxmh",
+            "children": [
+                {
+                    "title": "192.168.42.71",
+                    "key": "2-0",
+                    "children": null
+                },
+                {
+                    "title": "192.168.1.423",
+                    "key": "2-1",
+                    "children": null
+                }
+            ]
+        }
+    ]
+}

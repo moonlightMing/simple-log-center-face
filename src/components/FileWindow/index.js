@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Skeleton, Spin } from 'antd';
 import "./index.css";
 import FileController from '../FileController';
@@ -31,20 +31,19 @@ export default class FileWindow extends React.Component {
 
     render() {
         return (
-            <Router>
-                <div className="warpper">
-                    <div className="nav-hader">
-                        <DirRouter />
-                        <ListStyleBtn />
-                    </div>
-                    <Spin spinning={false} size="large" wrapperClassName="spin">
-                        <div className="window">
-                            <Route exact={true} path="/" component={Skeleton}></Route>
-                            <Route path="/filepath/:dir" component={FileController}></Route>
-                        </div>
-                    </Spin>
+            <div className="warpper">
+                <div className="nav-hader">
+                    <Route exact={true} path="/" component={null}></Route>
+                    <Route path="/ip/:host/filepath" component={DirRouter}></Route>
+                    <Route path="/ip/:host" component={ListStyleBtn}></Route>
                 </div>
-            </Router>
+                <Spin spinning={false} size="large" wrapperClassName="spin">
+                    <div className="window">
+                        <Route exact={true} path="/" component={Skeleton}></Route>
+                        <Route path="/ip/:host/filepath?dir=" component={FileController}></Route>
+                    </div>
+                </Spin>
+            </div>
         )
     }
 }
