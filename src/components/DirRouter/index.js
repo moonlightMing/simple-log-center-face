@@ -7,11 +7,11 @@ import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 
 class DirRouter extends React.Component {
   componentWillMount() {
-    this.props.routerChange(this.props.location.search)
+    this.props.routerChange(this.props.location.search.substring(6), this.props)
   }
 
   componentWillReceiveProps() {
-    this.props.routerChange(this.props.location.search)
+    this.props.routerChange(this.props.location.search.substring(6), this.props)
   }
 
   render() {
@@ -25,7 +25,7 @@ class DirRouter extends React.Component {
             routers.map((item, index) => {
               if (index !== routerLength - 1) {
                 // return <Breadcrumb.Item key={index}><a href={this.props.match.url + "?dir=" + item}>{item}</a></Breadcrumb.Item>
-                return <Breadcrumb.Item key={index}><Link to={this.props.match.url + "?dir=" + item}>{item}</Link></Breadcrumb.Item>
+                return <Breadcrumb.Item key={index}><Link to={this.props.match.url + "?dir=/" + routers.slice(0,-1).join('/')}>{item}</Link></Breadcrumb.Item>
               } else {
                 return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
               }
@@ -46,9 +46,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    routerChange(path) {
+    routerChange(path, props) {
+      if (props.routers.join('/') === path) {
+        return
+      }
       const routers = [];
-      path.substring(6).split('/').map((data) => {
+      path.split('/').map((data) => {
         routers.push(data)
       })
       dispatch(logWindowActionCreators.changeRouter(routers))
