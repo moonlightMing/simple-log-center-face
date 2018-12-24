@@ -1,120 +1,83 @@
 import React, { Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 import { List } from 'antd';
-import FileListGrid from '../FileListGrid';
+import FileListGrid from './FileListGrid';
 import { connect } from 'react-redux';
+import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 
 class FileController extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            displayHost: '',
-            displayDir: '',
-            data: [
-                {
-                    "name": "q3esfd",
-                    "type": 0,
-                    "update_time": "12月/12/15:18",
-                    "size": 0,
-                    "group": "root",
-                    "owner": "root"
-                },
-                {
-                    "name": "qwe",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                },
-                {
-                    "name": "15615",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                },
-                {
-                    "name": "wefewg",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                }, {
-                    "name": "wefewg",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                }, {
-                    "name": "wefewg",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                }, {
-                    "name": "wefewg",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                }, {
-                    "name": "wefewg",
-                    "type": 1,
-                    "update_time": "12月/12/15:27",
-                    "size": 6,
-                    "group": "root",
-                    "owner": "root"
-                }
-            ]
-        }
-    }
+  componentDidMount() {
+    const host = this.props.watchHost;
+    const path = this.props.location.search.substring(4)
+    // this.props.getDirItem(host, path)
 
-    componentDidMount() {
-        console.log(this.props.match.params.dir)
-    }
+    console.log(this.props)
 
+    this.props.getDirItem(host, path)
 
-    render() {
-        return (
-            <Fragment>
-                <List
-                    size="middle"
-                    grid={this.props.grid}
-                    dataSource={this.state.data}
-                    renderItem={item => (
-                        <List.Item>
-                            <FileListGrid
-                                fileType={item.type}
-                                title={item.name}
-                            />
-                            {/* <List.Item.Meta
+    this.props.history.listen(() => {
+      this.props.getDirItem(host, path)
+    })
+  }
+
+  componentWillUpdate(nextProps) {
+    // console.log(nextProps)
+    // const nHost = nextProps.match.params.host;
+    // const nPath = nextProps.location.search;
+    // const host = this.props.watchHost;
+    // if (this.props.location.search != nPath || this.props.match.params.host != nHost) {
+    //     this.props.getDirItem(nHost, nPath)
+    // }
+  }
+
+  onDoubleClick() {
+    console.log("double click")
+    console.log(this.props)
+    this.props.history.push('sdf')
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <List
+          size="middle"
+          grid={this.props.grid}
+          dataSource={this.props.data}
+          renderItem={(item) => (
+            <List.Item>
+              <FileListGrid
+                fileType={item.type}
+                title={item.name}
+                onDoubleClick={this.onDoubleClick.bind(this)}
+              />
+              {/* <List.Item.Meta
                                 avatar={<Icon alt="xcvsd" theme="filled" type="file-text" />}
                                 title={item.name}
                             /> */}
-                        </List.Item>
-                    )}
-                />
-            </Fragment>
-        );
-    }
+            </List.Item>
+          )}
+        />
+      </Fragment>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
-    return {
-        isGrid: state.getIn(['logWindow', 'isGrid']),
-        grid: state.getIn(['logWindow', 'grid'])
-    }
+  return {
+    isGrid: state.getIn(['logWindow', 'isGrid']),
+    grid: state.getIn(['logWindow', 'grid']),
+    data: state.getIn(['logWindow', 'dirData']),
+    watchHost: state.getIn(['logWindow', 'watchHost'])
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
+  return {
+    getDirItem(host, path) {
+      dispatch(logWindowActionCreators.getDirItem(host, path))
     }
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FileController);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FileController));

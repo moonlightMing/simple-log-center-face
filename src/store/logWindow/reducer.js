@@ -8,7 +8,11 @@ const defaultState = fromJS({
     grid: null,
     watchHost: "",
     isOpenWindow: false,
-    routers: ['data']
+    dirData: [],
+    routers: [{
+        name: 'data',
+        path: '/data'
+    }],
 });
 
 export default (state = defaultState, action) => {
@@ -35,6 +39,8 @@ export default (state = defaultState, action) => {
             return state.set('isOpenWindow', true)
         case actionTypes.CHANGE_ROUTER:
             return state.set('routers', action.routers)
+        case actionTypes.GET_DIR_ITEM:
+            return state.set('dirData', action.data)
         default:
             return state
     }

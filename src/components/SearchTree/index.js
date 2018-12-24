@@ -80,8 +80,7 @@ class SearchTree extends React.Component {
   onDoubleClick(e,node) {
     if (node.isLeaf()) {
       const host = node.props.title.props.children[2];
-      // this.props.changeWatchHost(host)
-      this.props.history.push("/ip/"+host+"/filepath?dir=/data");
+      this.props.history.push("/ip/"+host+"/listdir/data");
     }
   };
 

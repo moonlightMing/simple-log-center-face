@@ -7,27 +7,35 @@ import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 
 class DirRouter extends React.Component {
   componentWillMount() {
-    this.props.routerChange(this.props.location.search.substring(6), this.props)
+    console.log(this.props.match)
+    const routes = this.props.location.search.substring(6).split('/')
+    this.props.initRouter(routes)
   }
 
-  componentWillReceiveProps() {
-    this.props.routerChange(this.props.location.search.substring(6), this.props)
-  }
+  // componentWillReceiveProps() {
+  //   this.props.initRouter(this.props.location.search.substring(6), this.props)
+  // }
 
   render() {
     const { routers } = this.props;
-    const routerLength = routers.length
+    const routerLength = routers.length;
+    console.log(this.props.routers)
     return (
       <Fragment>
-        <span>({this.props.match.params.host})</span>
+        <span>({this.props.match.params.host}) </span>
         <Breadcrumb>
           {
             routers.map((item, index) => {
-              if (index !== routerLength - 1) {
-                // return <Breadcrumb.Item key={index}><a href={this.props.match.url + "?dir=" + item}>{item}</a></Breadcrumb.Item>
-                return <Breadcrumb.Item key={index}><Link to={this.props.match.url + "?dir=/" + routers.slice(0,-1).join('/')}>{item}</Link></Breadcrumb.Item>
+              if (index === routerLength - 1) {
+                return <Breadcrumb.Item key={index}>{item.name}</Breadcrumb.Item>
               } else {
-                return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
+                return (
+                  <Breadcrumb.Item key={index}>
+                    <Link to={this.props.match.url + "?dir=" + item.path}>
+                      {item.name}
+                    </Link>
+                  </Breadcrumb.Item>
+                )
               }
             })
           }
@@ -46,13 +54,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    routerChange(path, props) {
-      if (props.routers.join('/') === path) {
-        return
-      }
+    initRouter(routes) {
+      // if (routes.join('/') === path) {
+      //   return
+      // }
       const routers = [];
-      path.split('/').map((data) => {
-        routers.push(data)
+      routes.map((data, index) => {
+        routers.push({
+          name: data,
+          path: '/' + routes.slice(0, index + 1).join('/')
+        })
       })
       dispatch(logWindowActionCreators.changeRouter(routers))
     }
