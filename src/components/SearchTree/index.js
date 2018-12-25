@@ -5,6 +5,7 @@ import Axios from 'axios';
 import { connect } from 'react-redux';
 import * as hostTreeActionCreators from '../../store/hostTree/actionCreators';
 import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
+import queryString from 'querystring';
 
 const DirectoryTree = Tree.DirectoryTree;
 const { TreeNode } = Tree;
@@ -50,7 +51,7 @@ class SearchTree extends React.Component {
   };
 
   componentWillMount() {
-    Axios.get("/listAllHosts")
+    Axios.get("/api/listAllHosts")
       .then((res) => {
         this.setState({
           gData: res.data.result
@@ -80,7 +81,14 @@ class SearchTree extends React.Component {
   onDoubleClick(e,node) {
     if (node.isLeaf()) {
       const host = node.props.title.props.children[2];
-      this.props.history.push("/ip/"+host+"/listdir/data");
+      this.props.history.push({
+        pathname: '/listdir',
+        search: queryString.stringify({
+          vmode: 'list',
+          dir: '/data',
+          ip: host
+        })
+      });
     }
   };
 

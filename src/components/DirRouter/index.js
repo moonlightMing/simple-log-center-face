@@ -9,7 +9,7 @@ class DirRouter extends React.Component {
   componentWillMount() {
     console.log(this.props.match)
     const routes = this.props.location.search.substring(6).split('/')
-    this.props.initRouter(routes)
+    // this.props.initRouter(routes)
   }
 
   // componentWillReceiveProps() {

@@ -21,7 +21,7 @@ export const changeRouter = (routers) => ({
 
 export const getDirItem = (host, path) => {
     return (dispatch) => {
-        Axios.get('/listDir', {
+        Axios.get('/api/listDir', {
             host,
             path
         }).then((res) => {
