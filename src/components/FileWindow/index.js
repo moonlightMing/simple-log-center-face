@@ -27,6 +27,10 @@ export default class FileWindow extends React.Component {
     //     })
     // }
 
+    onClick() {
+        console.log("sdf")
+    }
+
     render() {
         return (
             <div className="warpper">

@@ -17,14 +17,11 @@ class DirRouter extends React.Component {
   // }
 
   render() {
-    const { routers } = this.props;
-    const routerLength = routers.length;
-    console.log(this.props.routers)
     return (
       <Fragment>
         <span>({this.props.match.params.host}) </span>
         <Breadcrumb>
-          {
+          {/* {
             routers.map((item, index) => {
               if (index === routerLength - 1) {
                 return <Breadcrumb.Item key={index}>{item.name}</Breadcrumb.Item>
@@ -38,7 +35,7 @@ class DirRouter extends React.Component {
                 )
               }
             })
-          }
+          } */}
         </Breadcrumb>
       </Fragment>
     )

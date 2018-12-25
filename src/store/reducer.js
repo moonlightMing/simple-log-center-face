@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux-immutable';
 import logWindowReducer from './logWindow/reducer';
-import hostTreeReducer from './hostTree/reducer'
+import hostTreeReducer from './hostTree/reducer';
+import { connectRouter } from 'connected-react-router/immutable';
 
-export default combineReducers({
+const createRootReducer = (history) => combineReducers({
+    router: connectRouter(history),
     logWindow: logWindowReducer,
     hostTree: hostTreeReducer
 })
+
+export default createRootReducer;
