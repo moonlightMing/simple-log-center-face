@@ -5,8 +5,6 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import * as store from './store';
 
-console.log("lhis", store.history)
-
 ReactDOM.render(<App history={store.history}/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

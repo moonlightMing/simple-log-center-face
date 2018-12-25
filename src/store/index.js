@@ -7,7 +7,6 @@ import Immutable from 'immutable';
 
 const initialState = Immutable.Map()
 export const history = createBrowserHistory()
-console.log('his',history)
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
     createRootReducer(history),

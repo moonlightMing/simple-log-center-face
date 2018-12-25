@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types'
 import * as actionCreators from '../../../store/logWindow/actionCreators';
 import querystring from 'querystring';
 
@@ -16,7 +17,7 @@ class ListStyleBtn extends React.Component {
     onClick() {
         console.log(this.props)
         this.props.history.push({
-            pathname: this.props.location.pathname,
+            pathname: this.props.pathname,
             search: querystring.stringify({
                 vmode: this.state.params.vmode === 'grid' ? 'list' : 'grid',
                 dir: this.state.params.dir,
@@ -37,4 +38,16 @@ class ListStyleBtn extends React.Component {
     }
 }
 
-export default connect(null, null)(ListStyleBtn);
+ListStyleBtn.propTypes = {
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+    hash: PropTypes.string,
+  }
+
+const mapStateToProps = state => ({
+    pathname: state.router.location.pathname,
+    search: state.router.location.search,
+    hash: state.router.location.hash,
+})
+
+export default connect(mapStateToProps, null)(ListStyleBtn);
