@@ -45,9 +45,9 @@ ListStyleBtn.propTypes = {
   }
 
 const mapStateToProps = state => ({
-    pathname: state.router.location.pathname,
-    search: state.router.location.search,
-    hash: state.router.location.hash,
+    pathname: state.getIn(['router', 'location', 'pathname']),
+    search: state.getIn(['router', 'location', 'search']),
+    hash: state.getIn(['router', 'location', 'hash']),
 })
 
 export default connect(mapStateToProps, null)(ListStyleBtn);
