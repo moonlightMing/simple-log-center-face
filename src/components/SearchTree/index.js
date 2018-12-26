@@ -78,16 +78,17 @@ class SearchTree extends React.Component {
     });
   };
 
-  onDoubleClick(e,node) {
+  onDoubleClick(e, node) {
     if (node.isLeaf()) {
       const host = node.props.title.props.children[2];
+      this.props.params.host = host;
+      this.props.params.dir = '/data';
+      if (!this.props.params.vmode) {
+        this.props.params.vmode = 'grid';
+      }
       this.props.history.push({
         pathname: '/listdir',
-        search: queryString.stringify({
-          vmode: 'list',
-          dir: '/data',
-          ip: host
-        })
+        search: queryString.stringify(this.props.params)
       });
     }
   };
@@ -122,7 +123,7 @@ class SearchTree extends React.Component {
     if (item.children) {
       return (
         <TreeNode icon={<Icon type="home" />} key={item.key} title={title} >
-            {this.loop(item.children)}
+          {this.loop(item.children)}
         </TreeNode>
       );
     }
@@ -136,7 +137,7 @@ class SearchTree extends React.Component {
     return (
       <div style={{ textAlign: "left" }}>
         <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
-        <DirectoryTree 
+        <DirectoryTree
           expandAction="doubleClick"
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
@@ -154,7 +155,8 @@ class SearchTree extends React.Component {
 const mapStateToProps = (state) => {
   return {
     gData: state.getIn(['hostTree', 'hostList']),
-    isOpenWindow: state.getIn(['logWindow', 'isOpenWindow'])
+    isOpenWindow: state.getIn(['logWindow', 'isOpenWindow']),
+    params: queryString.parse(state.getIn(['router', 'location', 'search']).substring(1)),
   }
 }
 

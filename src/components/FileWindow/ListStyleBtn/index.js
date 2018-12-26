@@ -15,7 +15,7 @@ class ListStyleBtn extends React.Component {
     }
 
     onClick() {
-        this.props.params.vmode = (this.props.params.vmode === 'list') ? 'grid' : "list";
+        this.props.params.vmode = (this.props.params.vmode === 'grid') ? 'list' : "grid";
         this.props.history.push({
             pathname: this.props.pathname,
             search: querystring.stringify(this.props.params)
