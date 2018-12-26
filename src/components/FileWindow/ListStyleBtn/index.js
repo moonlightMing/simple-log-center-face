@@ -15,14 +15,10 @@ class ListStyleBtn extends React.Component {
     }
 
     onClick() {
-        console.log(this.props)
+        this.props.params.vmode = (this.props.params.vmode === 'list') ? 'grid' : "list";
         this.props.history.push({
             pathname: this.props.pathname,
-            search: querystring.stringify({
-                vmode: this.state.params.vmode === 'grid' ? 'list' : 'grid',
-                dir: this.state.params.dir,
-                ip: this.state.params.ip
-            })
+            search: querystring.stringify(this.props.params)
         })
     }
 
@@ -32,7 +28,7 @@ class ListStyleBtn extends React.Component {
             <Button
                 style={{ marginLeft: "auto", marginRight: "2px" }}
                 onClick={this.onClick.bind(this)}
-                icon={this.state.params.vmode === 'grid' ? "ordered-list" : "table"}
+                icon={this.props.params.vmode === 'grid' ? "ordered-list" : "table"}
             />
         )
     }
@@ -46,7 +42,7 @@ ListStyleBtn.propTypes = {
 
 const mapStateToProps = state => ({
     pathname: state.getIn(['router', 'location', 'pathname']),
-    search: state.getIn(['router', 'location', 'search']),
+    params: querystring.parse(state.getIn(['router', 'location', 'search']).substring(1)),
     hash: state.getIn(['router', 'location', 'hash']),
 })
 
