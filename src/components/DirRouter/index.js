@@ -2,8 +2,10 @@ import React, { Fragment } from 'react';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import querystring from 'querystring';
 
 import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
+import BreadcrumbItem from 'antd/lib/breadcrumb/BreadcrumbItem';
 
 class DirRouter extends React.Component {
   componentWillMount() {
@@ -17,25 +19,31 @@ class DirRouter extends React.Component {
   // }
 
   render() {
+    const dirList = this.props.params.dir.split('/').slice(1)
+    // console.log(dirList)
     return (
       <Fragment>
-        <span>({this.props.match.params.host}) </span>
+        <span>{this.props.params.host} |</span>
         <Breadcrumb>
-          {/* {
-            routers.map((item, index) => {
-              if (index === routerLength - 1) {
-                return <Breadcrumb.Item key={index}>{item.name}</Breadcrumb.Item>
+          {
+            dirList.map((item, index) => {
+              if (index == dirList.length - 1) {
+                return <BreadcrumbItem key={index}>{item}</BreadcrumbItem>
               } else {
+                this.props.params.dir = '/' + dirList.slice(0, index + 1).join('/')
                 return (
-                  <Breadcrumb.Item key={index}>
-                    <Link to={this.props.match.url + "?dir=" + item.path}>
-                      {item.name}
+                  <BreadcrumbItem key={index}>
+                    <Link to={{
+                      path: this.props.pathname,
+                      search: querystring.stringify(this.props.params)
+                    }}>
+                      {item}
                     </Link>
-                  </Breadcrumb.Item>
+                  </BreadcrumbItem>
                 )
               }
             })
-          } */}
+          }
         </Breadcrumb>
       </Fragment>
     )
@@ -44,8 +52,8 @@ class DirRouter extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    host: state.getIn(['logWindow', 'watchHost']),
-    routers: state.getIn(['logWindow', 'routers']),
+    pathname: state.getIn(['router', 'location', 'pathname']),
+    params: querystring.parse(state.getIn(['router', 'location', 'search']).substring(1)),
   }
 }
 
