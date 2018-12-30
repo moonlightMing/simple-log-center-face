@@ -1,10 +1,8 @@
 import React from 'react';
-import { Modal, Tree, Input, Icon } from 'antd';
-import { Linkm, withRouter } from 'react-router-dom';
+import { Tree, Input, Icon } from 'antd';
+import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import { connect } from 'react-redux';
-import * as hostTreeActionCreators from '../../store/hostTree/actionCreators';
-import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 import queryString from 'querystring';
 
 const DirectoryTree = Tree.DirectoryTree;
@@ -160,16 +158,5 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeWatchHost(host) {
-      console.log(host)
-      dispatch(logWindowActionCreators.changeWatchHostAction(host))
-    },
-    OpenLogWindow() {
-      dispatch(logWindowActionCreators.openLogWindowAction())
-    }
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SearchTree));
+export default connect(mapStateToProps, null)(withRouter(SearchTree));

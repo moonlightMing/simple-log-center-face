@@ -8,22 +8,12 @@ import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 import BreadcrumbItem from 'antd/lib/breadcrumb/BreadcrumbItem';
 
 class DirRouter extends React.Component {
-  componentWillMount() {
-    console.log(this.props.match)
-    const routes = this.props.location.search.substring(6).split('/')
-    // this.props.initRouter(routes)
-  }
-
-  // componentWillReceiveProps() {
-  //   this.props.initRouter(this.props.location.search.substring(6), this.props)
-  // }
 
   render() {
     const dirList = this.props.params.dir.split('/').slice(1)
-    // console.log(dirList)
     return (
       <Fragment>
-        <span>{this.props.params.host} |</span>
+        <span style={{marginRight: "5px"}}>{this.props.params.host} |</span>
         <Breadcrumb>
           {
             dirList.map((item, index) => {

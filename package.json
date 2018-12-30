@@ -2,6 +2,7 @@
   "name": "simple-log-center-face",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:9090",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
@@ -84,7 +85,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:3000",
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",

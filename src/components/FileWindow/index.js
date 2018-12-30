@@ -8,29 +8,6 @@ import LogWindow from '../FileWindow';
 import ListStyleBtn from './ListStyleBtn';
 
 export default class FileWindow extends React.Component {
-    constructor(props) {
-        super(props)
-        // this.state = {
-        //     spinning: false
-        // }
-    }
-
-    // setSpinningStart() {
-    //     this.setState({
-    //         spinning: true
-    //     })
-    // }
-
-    // setSpinningEnd() {
-    //     this.setState({
-    //         spinning: false
-    //     })
-    // }
-
-    onClick() {
-        console.log("sdf")
-    }
-
     render() {
         return (
             <div className="warpper">

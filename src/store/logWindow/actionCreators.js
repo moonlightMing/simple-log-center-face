@@ -1,29 +1,29 @@
 import * as actionTypes from './actionTypes';
 import Axios from 'axios';
 
-export const changeListStyleAction = () => ({
-    type: actionTypes.CHANGE_LIST_STYLE
-});
-
 export const changeWatchHostAction = (host) => ({
-    type: actionTypes.CHANGE_WATCH_HSOT, 
+    type: actionTypes.CHANGE_WATCH_HSOT,
     host
 });
 
-export const openLogWindowAction = () => ({
-    type: actionTypes.OPEN_LOG_WINDOW
-})
-
 export const changeRouter = (routers) => ({
-  type: actionTypes.CHANGE_ROUTER,
-  routers
+    type: actionTypes.CHANGE_ROUTER,
+    routers
 })
 
-export const getDirItem = (host, path) => {
+export const getDirItem = (host, path, password) => {
     return (dispatch) => {
-        Axios.get('/api/listDir', {
+        console.log({
             host,
-            path
+            path,
+            password
+        })
+        Axios.get('/api/listDir', {
+            params: {
+                host,
+                path,
+                password: "itnihao"
+            }
         }).then((res) => {
             const data = res.data;
             const action = {
