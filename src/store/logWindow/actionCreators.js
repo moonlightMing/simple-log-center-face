@@ -9,7 +9,7 @@ export const changeWatchHostAction = (host) => ({
 export const changeRouter = (routers) => ({
     type: actionTypes.CHANGE_ROUTER,
     routers
-})
+});
 
 export const getDirItem = (host, path, password) => {
     return (dispatch) => {
@@ -25,7 +25,7 @@ export const getDirItem = (host, path, password) => {
                 password: "itnihao"
             }
         }).then((res) => {
-            const data = res.data;
+            const data = res.data.result;
             const action = {
                 type: actionTypes.GET_DIR_ITEM,
                 data
@@ -33,4 +33,9 @@ export const getDirItem = (host, path, password) => {
             dispatch(action)
         })
     }
-}
+};
+
+export const setSpinStatus = (isSpinning) => ({
+    type: actionTypes.SET_SPIN_STATUS,
+    isSpinning
+});

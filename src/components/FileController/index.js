@@ -1,15 +1,19 @@
-import React, { Fragment } from 'react';
-import { List, Button, Icon } from 'antd';
+import React from 'react';
+import { List, Spin,  Button, Icon } from 'antd';
 import FileListGrid from './FileListGrid';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
 import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
+import './index.css';
 
 class FileController extends React.Component {
 
     componentWillMount() {
+        this.props.setSpinState(true)
         this.getDirItem()
+
         this.props.history.listen(() => {
+            this.props.setSpinState(true)
             this.getDirItem()
         })
     }
@@ -17,9 +21,7 @@ class FileController extends React.Component {
     getDirItem() {
         const host = this.props.params.host;
         const path = this.props.params.dir;
-        console.log(host)
-        console.log(path)
-        this.props.getListData(host, path, null)
+        this.props.getListData(host, path, null);
     }
 
     gridDoubleClick(itemType, itemName) {
@@ -33,8 +35,9 @@ class FileController extends React.Component {
     }
 
     render() {
+        console.log(this.props.isSpinning)
         return (
-            <Fragment>
+            <Spin spinning={this.props.isSpinning} size="large" wrapperClassName="spin">
                 <List
                     size="middle"
                     grid={(
@@ -55,7 +58,7 @@ class FileController extends React.Component {
                         </List.Item>
                     )}
                 />
-            </Fragment>
+            </Spin>
         );
     }
 }
@@ -64,11 +67,15 @@ const mapStateToProps = state => ({
     pathname: state.getIn(['router', 'location', 'pathname']),
     params: querystring.parse(state.getIn(['router', 'location', 'search']).substring(1)),
     hash: state.getIn(['router', 'location', 'hash']),
-    listData: state.getIn(['logWindow', 'dirData'])
+    listData: state.getIn(['logWindow', 'dirData']),
+    isSpinning: state.getIn(['logWindow', 'isSpinning'])
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setSpinState(isSpinning) {
+            dispatch(logWindowActionCreators.setSpinStatus(isSpinning))
+        },
         getListData(host, path, password) {
             dispatch(logWindowActionCreators.getDirItem(host, path, password))
         }

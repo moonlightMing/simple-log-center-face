@@ -4,10 +4,8 @@ import {
 } from 'immutable';
 
 const defaultState = fromJS({
-    isGrid: false,
-    grid: null,
-    watchHost: "",
-    dirData: []
+    dirData: [],
+    isSpinning: true
 });
 
 export default (state = defaultState, action) => {
@@ -17,7 +15,12 @@ export default (state = defaultState, action) => {
         case actionTypes.CHANGE_ROUTER:
             return state.set('routers', action.routers)
         case actionTypes.GET_DIR_ITEM:
-            return state.set('dirData', action.data)
+            return state.merge(
+                { 'dirData': action.data },
+                { 'isSpinning': false }
+            )
+        case actionTypes.SET_SPIN_STATUS:
+            return state.set('isSpinning', action.isSpinning)
         default:
             return state
     }
