@@ -1,28 +1,60 @@
 import React from 'react';
-import { List, Spin,  Button, Icon } from 'antd';
+import { List, Spin, Button, Icon } from 'antd';
 import FileListGrid from './FileListGrid';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
 import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 import './index.css';
+import Axios from 'axios';
 
 class FileController extends React.Component {
 
-    componentWillMount() {
-        this.props.setSpinState(true)
-        this.getDirItem()
+    constructor(props) {
+        super(props)
+        this.state = {
+            isSpinning: true,
+            listData: []
+        }
+        this.getDirItem = this.getDirItem.bind(this)
+    }
 
-        this.props.history.listen(() => {
-            this.props.setSpinState(true)
+    componentWillMount() {
+        this.getDirItem()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.params.vmode)
+        if (nextProps.params.vmode === this.props.params.vmode) {
             this.getDirItem()
-        })
+        }
     }
 
     getDirItem() {
         const host = this.props.params.host;
         const path = this.props.params.dir;
-        this.props.getListData(host, path, null);
+        this.setState({
+            isSpinning: true
+        })
+        Axios.get('/api/listDir', {
+            params: {
+                host,
+                path,
+                password: "itnihao"
+            }
+        }).then((res) => {
+            const data = res.data.result;
+            this.setState({
+                listData: data,
+                isSpinning: false
+            })
+        })
     }
+
+    // getDirItem() {
+    //     const host = this.props.params.host;
+    //     const path = this.props.params.dir;
+    //     this.props.getListData(host, path, null);
+    // }
 
     gridDoubleClick(itemType, itemName) {
         if (itemType === 1) {
@@ -35,15 +67,14 @@ class FileController extends React.Component {
     }
 
     render() {
-        console.log(this.props.isSpinning)
         return (
-            <Spin spinning={this.props.isSpinning} size="large" wrapperClassName="spin">
+            <Spin spinning={this.state.isSpinning} size="large" wrapperClassName="spin">
                 <List
                     size="middle"
                     grid={(
                         this.props.params.vmode === 'list' ? null : { gutter: 16, column: 4 }
                     )}
-                    dataSource={this.props.listData}
+                    dataSource={this.state.listData}
                     renderItem={item => (
                         <List.Item>
                             <FileListGrid
