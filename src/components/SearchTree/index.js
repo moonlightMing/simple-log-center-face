@@ -84,6 +84,7 @@ class SearchTree extends React.Component {
       if (!this.props.params.vmode) {
         this.props.params.vmode = 'grid';
       }
+      console.log(this.props.params)
       this.props.history.push({
         pathname: '/listdir',
         search: queryString.stringify(this.props.params)
@@ -153,7 +154,6 @@ class SearchTree extends React.Component {
 const mapStateToProps = (state) => {
   return {
     gData: state.getIn(['hostTree', 'hostList']),
-    isOpenWindow: state.getIn(['logWindow', 'isOpenWindow']),
     params: queryString.parse(state.getIn(['router', 'location', 'search']).substring(1)),
   }
 }

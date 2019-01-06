@@ -13,7 +13,14 @@ class FileController extends React.Component {
         super(props)
         this.state = {
             isSpinning: true,
-            listData: []
+            listData: [{
+                "name": "q3esfd",
+                "type": 0,
+                "update_time": "12月/12/15:18",
+                "size": 0,
+                "group": "root",
+                "owner": "root"
+            }]
         }
         this.getDirItem = this.getDirItem.bind(this)
     }
@@ -23,15 +30,14 @@ class FileController extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.params.vmode)
         if (nextProps.params.vmode === this.props.params.vmode) {
-            this.getDirItem()
+            const host = nextProps.params.host;
+            const path = nextProps.params.dir;
+            this.getDirItem(host, path)
         }
     }
 
-    getDirItem() {
-        const host = this.props.params.host;
-        const path = this.props.params.dir;
+    getDirItem(host, path) {
         this.setState({
             isSpinning: true
         })
@@ -39,7 +45,7 @@ class FileController extends React.Component {
             params: {
                 host,
                 path,
-                password: "itnihao"
+                password: "vagrant"
             }
         }).then((res) => {
             const data = res.data.result;
@@ -60,7 +66,7 @@ class FileController extends React.Component {
         if (itemType === 1) {
             this.props.params.dir = this.props.params.dir + '/' + itemName
             this.props.history.push({
-                path: this.props.pathname,
+                pathname: '/listdir',
                 search: querystring.stringify(this.props.params)
             })
         }
@@ -81,6 +87,7 @@ class FileController extends React.Component {
                                 onDoubleClick={this.gridDoubleClick.bind(this, item.type, item.name)}
                                 fileType={item.type}
                                 title={item.name}
+                                key={item.name}
                             />
                             {/* <List.Item.Meta
                                 avatar={<Icon alt="xcvsd" theme="filled" type="file-text" />}
@@ -95,10 +102,10 @@ class FileController extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    pathname: state.getIn(['router', 'location', 'pathname']),
+    // pathname: state.getIn(['router', 'location', 'pathname']),
     params: querystring.parse(state.getIn(['router', 'location', 'search']).substring(1)),
     hash: state.getIn(['router', 'location', 'hash']),
-    listData: state.getIn(['logWindow', 'dirData']),
+    // listData: state.getIn(['logWindow', 'dirData']),
     isSpinning: state.getIn(['logWindow', 'isSpinning'])
 })
 
