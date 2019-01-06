@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Spin, Button, Icon } from 'antd';
+import { List, Spin, Avatar, Button, Icon } from 'antd';
 import FileListGrid from './FileListGrid';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
@@ -83,16 +83,17 @@ class FileController extends React.Component {
                     dataSource={this.state.listData}
                     renderItem={item => (
                         <List.Item>
-                            <FileListGrid
+                            {/* <FileListGrid
                                 onDoubleClick={this.gridDoubleClick.bind(this, item.type, item.name)}
                                 fileType={item.type}
                                 title={item.name}
                                 key={item.name}
-                            />
-                            {/* <List.Item.Meta
-                                avatar={<Icon alt="xcvsd" theme="filled" type="file-text" />}
-                                title={item.name}
                             /> */}
+                            <List.Item.Meta
+                                 avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                 title={<a href="https://ant.design">{item.name.last}</a>}
+                            />
+                            <div>{item.name}</div>
                         </List.Item>
                     )}
                 />
