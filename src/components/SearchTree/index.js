@@ -37,9 +37,6 @@ const generateList = (data) => {
   }
 };
 
-/*对于异步加载的子节点使用该key进行自增赋值*/
-let key = 10;
-
 class SearchTree extends React.Component {
   state = {
     expandedKeys: ['1'],
@@ -63,12 +60,6 @@ class SearchTree extends React.Component {
     // })
   }
 
-  // onSelect = (selectedKeys, info) => {
-  //   /*用于打开该节点的详细信息*/
-  //   console.log('selected', selectedKeys, info);
-  //   console.log(this.state.expandedKeys);
-  // };
-
   onExpand = (expandedKeys) => {
     this.setState({
       expandedKeys,
@@ -78,13 +69,17 @@ class SearchTree extends React.Component {
 
   onDoubleClick(e, node) {
     if (node.isLeaf()) {
-      const host = node.props.title.props.children[2];
+      // 搜索时，需要跳转的url由红字与黑字元素共同拼接
+      const host = node.props.title.props.children[1].props.children + node.props.title.props.children[2];
+      // 避免重复双击引起的多次请求
+      if (this.props.params.host === host && this.props.params.dir === '/data') {
+        return
+      }
       this.props.params.host = host;
       this.props.params.dir = '/data';
       if (!this.props.params.vmode) {
         this.props.params.vmode = 'grid';
       }
-      console.log(this.props.params)
       this.props.history.push({
         pathname: '/listdir',
         search: queryString.stringify(this.props.params)
@@ -100,6 +95,7 @@ class SearchTree extends React.Component {
       }
       return null;
     }).filter((item, i, self) => item && self.indexOf(item) === i);
+
     this.setState({
       expandedKeys,
       searchValue: value,
@@ -135,13 +131,12 @@ class SearchTree extends React.Component {
     generateList(gData);
     return (
       <div style={{ textAlign: "left" }}>
-        <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
+        <Search className="treeNodeUnselectable" style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
         <DirectoryTree
           expandAction="doubleClick"
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
-          // onSelect={this.onClick}
           onDoubleClick={this.onDoubleClick.bind(this)}
         >
           {this.loop(gData)}

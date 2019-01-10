@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import * as actionCreators from '../../../store/logWindow/actionCreators';
 import querystring from 'querystring';
 
 class ListStyleBtn extends React.Component {

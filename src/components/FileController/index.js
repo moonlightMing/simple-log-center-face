@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Spin, Avatar, Button, Card } from 'antd';
+import { List, Spin, Avatar } from 'antd';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
 import FileCard from './FileCard';
@@ -13,14 +13,7 @@ class FileController extends React.Component {
         super(props)
         this.state = {
             isSpinning: true,
-            listData: [{
-                "name": "q3esfd",
-                "type": 0,
-                "update_time": "12月/12/15:18",
-                "size": 0,
-                "group": "root",
-                "owner": "root"
-            }],
+            listData: [],
             grid: {
                 xs: 1,
                 sm: 2,
@@ -45,6 +38,9 @@ class FileController extends React.Component {
     }
 
     getDirItem(host, path) {
+        if (typeof (host) === "undefined" || typeof (path) === "undefined") {
+            return
+        }
         this.setState({
             isSpinning: true
         })
@@ -52,7 +48,7 @@ class FileController extends React.Component {
             params: {
                 host,
                 path,
-                password: "vagrant"
+                password: "itnihao"
             }
         }).then((res) => {
             const data = res.data.result;
@@ -63,7 +59,7 @@ class FileController extends React.Component {
         })
     }
 
-    gridDoubleClick(itemType, itemName) {
+    gridClick(itemType, itemName) {
         if (itemType === 1) {
             this.props.params.dir = this.props.params.dir + '/' + itemName
             this.props.history.push({
@@ -71,10 +67,6 @@ class FileController extends React.Component {
                 search: querystring.stringify(this.props.params)
             })
         }
-    }
-
-    gridOnMouseEnter() {
-        console.log(this)
     }
 
     render() {
@@ -89,21 +81,26 @@ class FileController extends React.Component {
                     renderItem={(item) => (
                         <List.Item
                             key={item.name}
-                            onDoubleClick={this.gridDoubleClick.bind(this, item.type, item.name)}
-                            onMouseEnter={this.gridOnMouseEnter.bind(this)}
+                            onClick={this.gridClick.bind(this, item.type, item.name)}
                         >
                             {
                                 this.props.params.vmode === 'list'
                                     ?
                                     <List.Item.Meta
                                         avatar={(
-                                            item.type === 0 ? <Avatar size="large" shape="square" icon="file-text" /> : <Avatar size="large" shape="square" icon="folder-open" />
+                                            item.type === 0
+                                                ?
+                                                <Avatar size="large" shape="square" icon="file-text" />
+                                                :
+                                                <Avatar size="large" shape="square" icon="folder-open" />
                                         )}
-                                        title={item.name}
                                         key={item.name}
+                                        title={
+                                            <span className="file-name treeNodeUnselectable">{item.name}</span>
+                                        }
                                     />
                                     :
-                                    <FileCard title={item.name} />
+                                    <FileCard title={item.name} fileType={item.type} />
                             }
                         </List.Item>
                     )}
@@ -114,10 +111,8 @@ class FileController extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    // pathname: state.getIn(['router', 'location', 'pathname']),
     params: querystring.parse(state.getIn(['router', 'location', 'search']).substring(1)),
     hash: state.getIn(['router', 'location', 'hash']),
-    // listData: state.getIn(['logWindow', 'dirData']),
     isSpinning: state.getIn(['logWindow', 'isSpinning'])
 })
 

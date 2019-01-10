@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
@@ -13,8 +13,8 @@ class DirRouter extends React.Component {
     const dirList = this.props.params.dir.split('/').slice(1)
     return (
       <Fragment>
-        <span style={{marginRight: "5px"}}>{this.props.params.host} |</span>
-        <Breadcrumb>
+        <span style={{marginRight: "5px"}} className="treeNodeUnselectable">{this.props.params.host} : /</span>
+        <Breadcrumb className="treeNodeUnselectable">
           {
             dirList.map((item, index) => {
               if (index == dirList.length - 1) {
@@ -23,7 +23,8 @@ class DirRouter extends React.Component {
                 this.props.params.dir = '/' + dirList.slice(0, index + 1).join('/')
                 return (
                   <BreadcrumbItem key={index}>
-                    <Link to={{
+                    <Link
+                    to={{
                       path: this.props.pathname,
                       search: querystring.stringify(this.props.params)
                     }}>
@@ -50,9 +51,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     initRouter(routes) {
-      // if (routes.join('/') === path) {
-      //   return
-      // }
       const routers = [];
       routes.map((data, index) => {
         routers.push({

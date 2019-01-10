@@ -5,13 +5,30 @@ import './index.css';
 const FileCard = (props) => {
     return (
         <Card
-            title={<Avatar shape="square" size="large" icon="user" />}
             className="file-card"
             hoverable={true}
+            bodyStyle={{
+                padding: 10,
+                paddingTop: 12,
+                paddingBottom: 12,
+
+            }}
         >
             <Card.Meta
+                avatar={
+                    props.fileType === 0
+                        ?
+                        <Avatar shape="square" size="large" icon="file-text" />
+                        :
+                        <Avatar shape="square" size="large" icon="folder-open" />
+                }
+                className="treeNodeUnselectable"
+                title={
+                    <span className="file-name">
+                        {props.title}
+                    </span>
+                }
             />
-            {props.title}
         </Card>
     )
 }

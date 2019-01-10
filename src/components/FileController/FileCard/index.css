@@ -1,5 +1,18 @@
 .file-card {
-    border-radius: 3px;
+    border-radius: 5px;
     margin: 5px;
-    text-align: center;
+    text-align: left;
+}
+
+.treeNodeUnselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+}
+
+.file-name {
+    color: "#696969";
+    font-size: 14;
+    font-weight: 200;
 }
