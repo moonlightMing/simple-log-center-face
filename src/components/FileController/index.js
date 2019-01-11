@@ -66,6 +66,12 @@ class FileController extends React.Component {
                 pathname: '/listdir',
                 search: querystring.stringify(this.props.params)
             })
+        } else if (itemType === 0) {
+            this.props.params.dir = this.props.params.dir + '/' + itemName
+            this.props.history.push({
+                pathname: '/logbrowser',
+                search: querystring.stringify(this.props.params)
+            })
         }
     }
 

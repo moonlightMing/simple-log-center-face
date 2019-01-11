@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Breadcrumb, Icon } from 'antd';
+import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
@@ -17,7 +17,7 @@ class DirRouter extends React.Component {
         <Breadcrumb className="treeNodeUnselectable">
           {
             dirList.map((item, index) => {
-              if (index == dirList.length - 1) {
+              if (index === dirList.length - 1) {
                 return <BreadcrumbItem key={index}>{item}</BreadcrumbItem>
               } else {
                 this.props.params.dir = '/' + dirList.slice(0, index + 1).join('/')
