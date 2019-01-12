@@ -14,8 +14,10 @@ export default class FileWindow extends React.Component {
             <div className="warpper">
                 <div className="nav-hader">
                     <Route exact={true} path="/" component={null}></Route>
+
                     <Route path="/listdir" component={DirRouter}></Route>
                     <Route path="/listdir" component={ListStyleBtn}></Route>
+
                     <Route path="/logbrowser" component={GoBackBtn}></Route>
                 </div>
                 <div className="window">

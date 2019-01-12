@@ -3,7 +3,6 @@ import { List, Spin, Avatar } from 'antd';
 import { connect } from 'react-redux';
 import querystring from 'querystring';
 import FileCard from './FileCard';
-import * as logWindowActionCreators from '../../store/logWindow/actionCreators';
 import './index.css';
 import Axios from 'axios';
 
@@ -41,6 +40,7 @@ class FileController extends React.Component {
         if (typeof (host) === "undefined" || typeof (path) === "undefined") {
             return
         }
+
         this.setState({
             isSpinning: true
         })
@@ -60,17 +60,24 @@ class FileController extends React.Component {
     }
 
     gridClick(itemType, itemName) {
+        const { params } = this.props;
+        const dir = this.props.params.dir + '/' + itemName
         if (itemType === 1) {
-            this.props.params.dir = this.props.params.dir + '/' + itemName
             this.props.history.push({
                 pathname: '/listdir',
-                search: querystring.stringify(this.props.params)
+                search: querystring.stringify({
+                    host: params.host,
+                    dir,
+                    vmode: params.vmode
+                })
             })
-        } else if (itemType === 0) {
-            this.props.params.dir = this.props.params.dir + '/' + itemName
+        } else {
             this.props.history.push({
                 pathname: '/logbrowser',
-                search: querystring.stringify(this.props.params)
+                search: querystring.stringify({
+                    host: params.host,
+                    dir,
+                })
             })
         }
     }
@@ -106,7 +113,7 @@ class FileController extends React.Component {
                                         }
                                     />
                                     :
-                                    <FileCard title={item.name} fileType={item.type} />
+                                    <FileCard className="file-card" title={item.name} fileType={item.type} />
                             }
                         </List.Item>
                     )}
@@ -118,19 +125,6 @@ class FileController extends React.Component {
 
 const mapStateToProps = state => ({
     params: querystring.parse(state.getIn(['router', 'location', 'search']).substring(1)),
-    hash: state.getIn(['router', 'location', 'hash']),
-    isSpinning: state.getIn(['logWindow', 'isSpinning'])
 })
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setSpinState(isSpinning) {
-            dispatch(logWindowActionCreators.setSpinStatus(isSpinning))
-        },
-        getListData(host, path, password) {
-            dispatch(logWindowActionCreators.getDirItem(host, path, password))
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FileController);
+export default connect(mapStateToProps, null)(FileController);
