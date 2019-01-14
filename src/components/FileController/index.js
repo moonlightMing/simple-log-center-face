@@ -48,7 +48,7 @@ class FileController extends React.Component {
             params: {
                 host,
                 path,
-                password: "itnihao"
+                password: "vagrant"
             }
         }).then((res) => {
             const data = res.data.result;
