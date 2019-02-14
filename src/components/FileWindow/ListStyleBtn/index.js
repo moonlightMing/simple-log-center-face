@@ -5,11 +5,7 @@ import PropTypes from 'prop-types'
 import querystring from 'querystring';
 
 class ListStyleBtn extends React.Component {
-
-    constructor(props) {
-        super(props)
-    }
-
+  
     onClick() {
         const { pathname, params } = this.props;
         const vmode = (params.vmode === 'grid') ? 'list' : "grid";

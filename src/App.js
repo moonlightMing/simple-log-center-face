@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
+// import { BrowserRouter } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router/immutable';
 import { Layout } from 'antd';
 import PropTypes from 'prop-types';
