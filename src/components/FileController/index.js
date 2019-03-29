@@ -24,7 +24,7 @@ class FileController extends React.Component {
         this.getDirItem = this.getDirItem.bind(this)
     }
 
-    componentWillMount() {
+    componentWillUpdate() {
         this.getDirItem()
     }
 

@@ -1,0 +1,11 @@
+.console-win {
+    background: #FAFAFA;
+    border: 1px solid rgb(192, 191, 191);
+    margin: auto;
+    width: 98%;
+    flex: 1;
+    text-align: left;
+    /* overflow-y: auto; */
+    overflow-y: hidden;
+    z-index: 0;
+}
