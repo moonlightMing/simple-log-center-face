@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tree, Input, Icon } from 'antd';
+import { Tree, Input, Icon, Menu, Dropdown } from 'antd';
 import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import { connect } from 'react-redux';
@@ -8,6 +8,14 @@ import queryString from 'querystring';
 const DirectoryTree = Tree.DirectoryTree;
 const { TreeNode } = Tree;
 const Search = Input.Search;
+
+const menu = (
+  <Menu>
+    <Menu.Item key="1">1st menu item</Menu.Item>
+    <Menu.Item key="2">2nd menu item</Menu.Item>
+    <Menu.Item key="3">3rd menu item</Menu.Item>
+  </Menu>
+);
 
 const getParentKey = (title, tree) => {
   let parentKey;
@@ -122,7 +130,14 @@ class SearchTree extends React.Component {
         </TreeNode>
       );
     }
-    return <TreeNode icon={<Icon type="desktop" />} key={item.key} title={title} isLeaf />;
+    return (
+      <TreeNode 
+        icon={<Icon type="desktop" />} 
+        key={item.key} 
+        title={title} 
+        isLeaf
+      />
+    );
   });
 
   render() {
@@ -138,6 +153,14 @@ class SearchTree extends React.Component {
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
           onDoubleClick={this.onDoubleClick.bind(this)}
+          onRightClick={({event, node})=>{
+            console.log(event, node)
+            if (!node.isLeaf()) {
+              return
+            }
+            console.log("is leaf")
+            const w = window.open('/terminal?host=192.168.31.106&dir=%2Fdata&vmode=grid');
+          }}
         >
           {this.loop(gData)}
         </DirectoryTree>

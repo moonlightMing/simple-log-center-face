@@ -8,31 +8,41 @@ import { Provider } from 'react-redux';
 import store from './store';
 import SearchTree from './components/SearchTree';
 import FileWindow from './components/FileWindow';
+import { Route, Switch } from 'react-router-dom';
 
 const {
   Sider, Content,
 } = Layout;
 
-const App = ({history}) => {
+const logConsole = () => (
+  <Layout className="layout">
+    <Sider className="sider">
+      <SearchTree />
+    </Sider>
+    <Layout>
+      <Content className="content">
+        <FileWindow />
+      </Content>
+    </Layout>
+  </Layout>
+)
+
+const App = ({ history }) => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
         {/* <BrowserRouter> */}
-          <div className="App">
-            <Layout className="layout">
-              <Sider className="sider">
-                <SearchTree />
-              </Sider>
-              <Layout>
-                <Content className="content">
-                  <FileWindow />
-                </Content>
-              </Layout>
-            </Layout>
-          </div>
+        <div className="App">
+          <Switch>
+            <Route path="/terminal" component={() => (
+              <SearchTree />
+            )}></Route>
+            <Route path="/" component={logConsole}></Route>
+          </Switch>
+        </div>
         {/* </BrowserRouter> */}
       </ConnectedRouter>
-    </Provider>
+    </Provider >
   )
 }
 

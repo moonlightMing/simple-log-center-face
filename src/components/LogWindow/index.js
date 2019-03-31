@@ -11,7 +11,7 @@ class LogWindow extends React.Component {
     const logParams = querystring.stringify ({
       host: props.params.host,
       path: props.params.dir,
-      password: 'chuangyou@123',
+      // password: 'vagrant',
     });
     const location = window.location;
     // const protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://'
@@ -31,6 +31,10 @@ class LogWindow extends React.Component {
       // console.log(this.vList)
       this.vList.scrollToRow (-1);
     };
+
+    ws.onclose = e => {
+      console.log('Close')
+    }
 
     this.state = {
       ws,
