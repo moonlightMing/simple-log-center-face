@@ -1,15 +1,23 @@
 import React, {Fragment} from 'react';
+import querystring from 'querystring';
 import {Terminal} from 'xterm';
-import '../../../node_modules/xterm/dist/xterm.css';
-
+import {connect} from 'react-redux';
+import 'xterm/dist/xterm.css';
 import * as fullscreen
-  from '../../../node_modules/xterm/lib/addons/fullscreen/fullscreen';
+  from 'xterm/lib/addons/fullscreen/fullscreen';
 // import * as fit from '../../../node_modules/xterm/dist/addons/fit/fit';
+import * as attach from 'xterm/lib/addons/attach/attach';
 import './index.css';
 
-export default class XtremWindow extends React.Component {
-  componentDidMount () {
+class XtremWindow extends React.Component {
+  constructor(props) {
+    super(props)
+    Terminal.applyAddon (attach);
     Terminal.applyAddon (fullscreen);
+  }
+
+  componentDidMount () {
+    
     // Terminal.applyAddon (fit);
     let term = new Terminal ({
       cols: 100,
@@ -22,6 +30,36 @@ export default class XtremWindow extends React.Component {
     term.open (document.getElementById ('terminal-container'));
     term.toggleFullScreen(true);
     // term.fit ();
+
+    const logParams = querystring.stringify ({
+      host: this.props.params.host,
+      path: this.props.params.dir,
+      // password: 'vagrant',
+    });
+    let socketURL = 'ws://localhost:9090/api/terminalShell?' + logParams;
+    const ws = new WebSocket (socketURL);
+    ws.onmessage = (data) => {
+      console.log(data)
+      term.write(data)
+    }
+    ws.onclose = () => {
+      console.log("close")
+    }
+    // term.attach (ws, true, false);
+
+    term.textarea.onkeydown = function (e) {
+      console.log('User pressed key with keyCode: ', e.keyCode);
+      //console.log('编码',)
+      //ws.send(that.encodeBase64Content(e.keyCode.toString()));
+      //ws.send('bHM=');
+      term.write(e.keyCode)
+    }
+    term.on('data',function(data){
+      console.log('data xterm=>',data)
+      term.write(data);
+
+      // ws.send(that.encodeBase64Content(data.toString()))
+   })
   }
 
   render () {
@@ -32,3 +70,11 @@ export default class XtremWindow extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  params: querystring.parse (
+    state.getIn (['router', 'location', 'search']).substring (1)
+  ),
+});
+
+export default connect(mapStateToProps, null) (XtremWindow);
