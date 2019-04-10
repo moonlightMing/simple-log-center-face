@@ -30,13 +30,13 @@ class FileController extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.params.vmode === this.props.params.vmode) {
+      const nextHost = nextProps.params.host;
+      const nextDir = nextProps.params.dir;
       if (
-        nextProps.params.host !== this.props.params.host ||
-        nextProps.params.dir !== this.props.params.dir
+        nextHost !== this.props.params.host ||
+        nextDir !== this.props.params.dir
       ) {
-        const host = nextProps.params.host;
-        const dir = nextProps.params.dir;
-        this.getDirItem (host, dir);
+        this.getDirItem (nextHost, nextDir);
       }
     }
   }
