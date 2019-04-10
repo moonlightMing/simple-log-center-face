@@ -3,33 +3,17 @@ import querystring from 'querystring';
 import {Terminal} from 'xterm';
 import {connect} from 'react-redux';
 import 'xterm/dist/xterm.css';
-import * as fullscreen
-  from 'xterm/lib/addons/fullscreen/fullscreen';
-// import * as fit from '../../../node_modules/xterm/dist/addons/fit/fit';
+import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
+import * as fit from 'xterm/dist/addons/fit/fit';
 import * as attach from 'xterm/lib/addons/attach/attach';
 import './index.css';
 
 class XtremWindow extends React.Component {
-  constructor(props) {
-    super(props)
-    Terminal.applyAddon (attach);
-    Terminal.applyAddon (fullscreen);
-  }
-
-  componentDidMount () {
-    
-    // Terminal.applyAddon (fit);
-    let term = new Terminal ({
-      cols: 100,
-      rows: 120,
-      cursorBlink: 5,
-      scrollback: 30,
-      tabStopWidth: 4,
-      textarea: true
-  });
-    term.open (document.getElementById ('terminal-container'));
-    term.toggleFullScreen(true);
-    // term.fit ();
+  constructor (props) {
+    super (props);
+    Terminal.applyAddon (fit);
+    // Terminal.applyAddon (attach);
+    // Terminal.applyAddon (fullscreen);
 
     const logParams = querystring.stringify ({
       host: this.props.params.host,
@@ -38,28 +22,58 @@ class XtremWindow extends React.Component {
     });
     let socketURL = 'ws://localhost:9090/api/terminalShell?' + logParams;
     const ws = new WebSocket (socketURL);
-    ws.onmessage = (data) => {
-      console.log(data)
-      term.write(data)
-    }
+
+    let term = new Terminal ({
+      cols: 100,
+      rows: 120,
+      cursorBlink: 5,
+      scrollback: 30,
+      tabStopWidth: 4,
+      textarea: true,
+    });
+
+    this.state = {
+      ws,
+      term
+    };
+  }
+
+  componentDidMount () {
+    // Terminal.applyAddon (fit);
+    const { term, ws } = this.state;
+    term.open (document.getElementById ('terminal-container'));
+    // term.toggleFullScreen(true);
+    term.fit ();
+
+    ws.onmessage = data => {
+      console.log (data);
+      term.write (data);
+    };
     ws.onclose = () => {
-      console.log("close")
-    }
+      console.log ('close');
+    };
     // term.attach (ws, true, false);
 
     term.textarea.onkeydown = function (e) {
-      console.log('User pressed key with keyCode: ', e.keyCode);
+      // console.log('User pressed key with keyCode: ', e.keyCode);
       //console.log('编码',)
       //ws.send(that.encodeBase64Content(e.keyCode.toString()));
       //ws.send('bHM=');
-      term.write(e.keyCode)
-    }
-    term.on('data',function(data){
-      console.log('data xterm=>',data)
-      term.write(data);
+      term.write (e.keyCode);
+      ws.send (e.key);
+    };
 
-      // ws.send(that.encodeBase64Content(data.toString()))
-   })
+    term.on ('data', function (data) {
+      console.log ('data xterm=>', data);
+      term.write (data);
+
+      ws.send (data);
+    });
+  }
+
+  componentWillUnmount () {
+    this.state.term.detach(this.state.ws)
+    this.ws.close()
   }
 
   render () {
@@ -77,4 +91,4 @@ const mapStateToProps = state => ({
   ),
 });
 
-export default connect(mapStateToProps, null) (XtremWindow);
+export default connect (mapStateToProps, null) (XtremWindow);
