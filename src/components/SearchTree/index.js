@@ -124,9 +124,9 @@ class SearchTree extends React.Component {
     }
     return (
       <TreeNode 
-        icon={<Icon type="desktop" />} 
-        key={item.key} 
-        title={title} 
+        icon={<Icon type="desktop" />}
+        key={item.key}
+        title={title}
         isLeaf
       />
     );
