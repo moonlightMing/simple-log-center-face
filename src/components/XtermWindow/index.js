@@ -46,9 +46,10 @@ class XtremWindow extends React.Component {
     term.fit ();
 
     // websocket关闭或断开时，提示用户
-    ws.onclose = () => {
+    ws.onclose = () => {     
+      term.detach (ws);
       term.clear ();
-      term.writeln ('The WebSocket Close...');
+      term.writeln ('\r\n\r\nThe WebSocket Close...');
     };
 
     term.attach (ws, true, false);
@@ -58,10 +59,8 @@ class XtremWindow extends React.Component {
   }
 
   componentWillUnmount () {
-    const {term, ws} = this.state;
-
-    // 断开前端terminal连接
-    term.detach (ws);
+    
+    const {ws} = this.state;    
 
     // 关闭服务端websocket
     ws.close ();
