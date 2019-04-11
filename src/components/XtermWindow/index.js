@@ -1,93 +1,84 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import querystring from 'querystring';
-import { Terminal } from 'xterm';
-import { connect } from 'react-redux';
+import {Terminal} from 'xterm';
+import {connect} from 'react-redux';
 import 'xterm/dist/xterm.css';
-import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
-import * as fit from 'xterm/dist/addons/fit/fit';
+import * as fit from 'xterm/lib/addons/fit/fit';
 import * as attach from 'xterm/lib/addons/attach/attach';
 import './index.css';
 
 class XtremWindow extends React.Component {
-  constructor(props) {
-    super(props);
-    Terminal.applyAddon(fit);
-    Terminal.applyAddon(attach);
-    // Terminal.applyAddon (fullscreen);
+  constructor (props) {
+    super (props);
+    Terminal.applyAddon (attach);
+    Terminal.applyAddon (fit);
 
-    const logParams = querystring.stringify({
-      host: this.props.params.host,
-      path: this.props.params.dir,
-      // password: 'vagrant',
-    });
-    let socketURL = 'ws://localhost:9090/api/terminalShell?' + logParams;
-    const ws = new WebSocket(socketURL);
-
-    let term = new Terminal({
-      // cols: 100,
-      // rows: 120,
-      cursorBlink: 5,
-      scrollback: 30,
-      tabStopWidth: 4,
-      textarea: false,
+    const term = new Terminal ({
+      rows: 36,
     });
 
     this.state = {
-      ws,
-      term
+      ws: null,
+      term,
     };
   }
 
-  componentDidMount() {
-    const { term, ws } = this.state;
-    term.open(document.getElementById('terminal-container'));
-    term.fit();
+  onWindowResize () {
+    const {term} = this.state;
+    term.fit ();
+  }
 
-    // ws.onmessage = data => {
-    //   console.log(data.data);
-    //   term.write(data.data);
-    // };
+  componentDidMount () {
+    const {term} = this.state;
+    const {host, dir} = this.props.params;
+    // 开始websocket连接
+    // 必须在组件挂在完毕后才能获取到term的size，继而连接websocket设定terminal大小
+    const logParams = querystring.stringify ({
+      host,
+      path: dir,
+      termHeight: term.rows,
+      termWidth: term.cols,
+    });
+    let socketURL = `ws://localhost:9090/api/terminalShell?${logParams}`;
+    const ws = new WebSocket (socketURL);
+    this.setState ({ws});
+    term.open (document.getElementById ('terminal-container'));
+    term.fit ();
+
+    // websocket关闭或断开时，提示用户
     ws.onclose = () => {
-      console.log('close');
-      term.writeln("The WebSocket Close...")
+      term.clear ();
+      term.writeln ('The WebSocket Close...');
     };
+
     term.attach (ws, true, false);
 
-    // term.textarea.onkeydown = function (e) {
-
-    //   console.log(e.keyCode.toString())
-    //   if (e.keyCode.toString() === "13") {
-    //     ws.send("\r\n")
-    //     // term.write("\r\n")
-    //   } else {
-    //     ws.send(e.key.toString());
-    //   }
-    // };
-
-    // term.on('data', function (data) {
-    //   // console.log('data xterm=>', data);
-    //   term.write(data.data);
-    // });
+    // 注册窗口resize事件监听，
+    window.addEventListener ('resize', this.onWindowResize.bind (this));
   }
 
-  componentWillUnmount() {
-    this.state.term.detach(this.state.ws)
-    this.ws.close()
+  componentWillUnmount () {
+    const {term, ws} = this.state;
+
+    // 断开前端terminal连接
+    term.detach (ws);
+
+    // 关闭服务端websocket
+    ws.close ();
+
+    // 取消窗口resize事件监听
+    window.removeEventListener ('resize', this.onWindowResize.bind (this));
   }
 
-  render() {
-    return (
-      <Fragment>
-        <div id="terminal-container" />
-      </Fragment>
-    );
+  render () {
+    return <div id="terminal-container" />;
   }
 }
 
 const mapStateToProps = state => ({
-  params: querystring.parse(
-    state.getIn(['router', 'location', 'search']).substring(1)
+  params: querystring.parse (
+    state.getIn (['router', 'location', 'search']).substring (1)
   ),
 });
 
-export default connect(mapStateToProps, null)(XtremWindow);
+export default connect (mapStateToProps, null) (XtremWindow);
