@@ -146,12 +146,10 @@ class SearchTree extends React.Component {
           autoExpandParent={autoExpandParent}
           onDoubleClick={this.onDoubleClick.bind(this)}
           onRightClick={({event, node})=>{
-            console.log(event, node)
             if (!node.isLeaf()) {
               return
             }
-            console.log("is leaf")
-            window.open('/terminal?host=192.168.31.106&dir=%2Fdata&vmode=grid');
+            window.open(`/terminal?host=${node.props.title.props.children[2]}`);
           }}
         >
           {this.loop(gData)}
