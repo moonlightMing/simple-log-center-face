@@ -33,13 +33,16 @@ class XtremWindow extends React.Component {
     const {host, dir} = this.props.params;
     // 开始websocket连接
     // 必须在组件挂在完毕后才能获取到term的size，继而连接websocket设定terminal大小
+    const location = window.location;
+    const protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://'
     const logParams = querystring.stringify ({
       host,
       path: dir,
       termHeight: term.rows,
       termWidth: term.cols,
     });
-    let socketURL = `ws://localhost:9090/api/terminalShell?${logParams}`;
+    let socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/api/tailLog?" + logParams
+    // let socketURL = `ws://localhost:9090/api/terminalShell?${logParams}`;
     const ws = new WebSocket (socketURL);
     this.setState ({ws});
     term.open (document.getElementById ('terminal-container'));

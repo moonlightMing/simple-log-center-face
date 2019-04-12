@@ -14,14 +14,13 @@ class LogWindow extends React.Component {
     Terminal.applyAddon (attach);
 
     const location = window.location;
-    // const protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://'
-    // let socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/api/tailLog?" + logParams
+    const protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://'
     const logParams = querystring.stringify ({
       host: this.props.params.host,
       path: this.props.params.dir,
-      // password: 'vagrant',
     });
-    let socketURL = 'ws://localhost:9090/api/tailLog?' + logParams;
+    let socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/api/tailLog?" + logParams
+    // let socketURL = 'ws://localhost:9090/api/tailLog?' + logParams;
     const ws = new WebSocket (socketURL);
 
     let term = new Terminal ({
