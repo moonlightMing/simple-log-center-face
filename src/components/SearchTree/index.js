@@ -4,6 +4,8 @@ import {withRouter} from 'react-router-dom';
 import Axios from 'axios';
 import {connect} from 'react-redux';
 import queryString from 'querystring';
+import {bindActionCreators} from 'redux';
+import {isWebTerminalOpenAction} from '../../store/hostTree/actionCreators';
 
 const DirectoryTree = Tree.DirectoryTree;
 const {TreeNode} = Tree;
@@ -46,6 +48,9 @@ class SearchTree extends React.Component {
   };
 
   componentWillMount () {
+    // 检测WebTerminal是否开启
+    this.props.isWebTerminalOpenAction ();
+
     Axios.get ('/api/listAllHosts').then (res => {
       this.setState ({
         gData: res.data.result,
@@ -139,6 +144,7 @@ class SearchTree extends React.Component {
 
   render () {
     const {expandedKeys, autoExpandParent, gData} = this.state;
+    const {isWebTerminalOpen} = this.props;
     // 进行数组扁平化处理
     generateList (gData);
     return (
@@ -159,9 +165,11 @@ class SearchTree extends React.Component {
             if (!node.isLeaf ()) {
               return;
             }
-            window.open (
-              `/terminal?host=${node.props.title.props.children[2]}`
-            );
+            if (isWebTerminalOpen) {
+              window.open (
+                `/terminal?host=${node.props.title.props.children[2]}`
+              );
+            }
           }}
         >
           {this.loop (gData)}
@@ -174,10 +182,20 @@ class SearchTree extends React.Component {
 const mapStateToProps = state => {
   return {
     gData: state.getIn (['hostTree', 'hostList']),
+    isWebTerminalOpen: state.getIn (['hostTree', 'isWebTerminalOpen']),
     params: queryString.parse (
       state.getIn (['router', 'location', 'search']).substring (1)
     ),
   };
 };
 
-export default connect (mapStateToProps, null) (withRouter (SearchTree));
+const mapDispatchToProps = dispatch => ({
+  isWebTerminalOpenAction: bindActionCreators (
+    isWebTerminalOpenAction,
+    dispatch
+  ),
+});
+
+export default connect (mapStateToProps, mapDispatchToProps) (
+  withRouter (SearchTree)
+);

@@ -53,7 +53,6 @@ class FileController extends React.Component {
       params: {
         host,
         path,
-        // password: "chuangyou@123"
       },
     }).then (res => {
       const data = res.data.result;
@@ -67,10 +66,10 @@ class FileController extends React.Component {
   onGridClick (itemType, itemName) {
     const {params, history} = this.props;
     let dir;
-    if (itemName.slice(0,1) === '/') {
-      dir = params.dir.trim() + itemName
+    if (itemName.slice (0, 1) === '/') {
+      dir = params.dir.trim () + itemName;
     } else {
-      dir = params.dir.trim() + '/' + itemName
+      dir = params.dir.trim () + '/' + itemName;
     }
     if (itemType === 1) {
       history.push ({
