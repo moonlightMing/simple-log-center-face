@@ -64,11 +64,16 @@ class FileController extends React.Component {
     });
   }
 
-  gridClick (itemType, itemName) {
-    const {params} = this.props;
-    const dir = this.props.params.dir + '/' + itemName;
+  onGridClick (itemType, itemName) {
+    const {params, history} = this.props;
+    let dir;
+    if (itemName.slice(0,1) === '/') {
+      dir = params.dir.trim() + itemName
+    } else {
+      dir = params.dir.trim() + '/' + itemName
+    }
     if (itemType === 1) {
-      this.props.history.push ({
+      history.push ({
         pathname: '/listdir',
         search: querystring.stringify ({
           host: params.host,
@@ -77,7 +82,7 @@ class FileController extends React.Component {
         }),
       });
     } else {
-      this.props.history.push ({
+      history.push ({
         pathname: '/logbrowser',
         search: querystring.stringify ({
           host: params.host,
@@ -101,7 +106,7 @@ class FileController extends React.Component {
           renderItem={item => (
             <List.Item
               key={item.name}
-              onClick={this.gridClick.bind (this, item.type, item.name)}
+              onClick={this.onGridClick.bind (this, item.type, item.name)}
             >
               {this.props.params.vmode === 'list'
                 ? <List.Item.Meta
