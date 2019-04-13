@@ -41,7 +41,7 @@ class XtremWindow extends React.Component {
       termHeight: term.rows,
       termWidth: term.cols,
     });
-    let socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/api/tailLog?" + logParams
+    let socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/api/terminalShell?" + logParams
     // let socketURL = `ws://localhost:9090/api/terminalShell?${logParams}`;
     const ws = new WebSocket (socketURL);
     this.setState ({ws});
@@ -52,7 +52,7 @@ class XtremWindow extends React.Component {
     ws.onclose = () => {     
       term.detach (ws);
       term.clear ();
-      term.writeln ('\r\n\r\nThe WebSocket Close...');
+      term.writeln ('\r\nThe WebSocket Close...');
     };
 
     term.attach (ws, true, false);
