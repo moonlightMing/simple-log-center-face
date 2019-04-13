@@ -1,14 +1,14 @@
 import React from 'react';
-import {List, Spin, Avatar} from 'antd';
-import {connect} from 'react-redux';
+import { List, Spin, Avatar, Modal } from 'antd';
+import { connect } from 'react-redux';
 import querystring from 'querystring';
 import FileCard from './FileCard';
 import './index.css';
 import Axios from 'axios';
 
 class FileController extends React.Component {
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
     this.state = {
       isSpinning: true,
       listData: [],
@@ -20,15 +20,15 @@ class FileController extends React.Component {
         xl: 5,
       },
     };
-    this.getDirItem = this.getDirItem.bind (this);
+    this.getDirItem = this.getDirItem.bind(this);
   }
 
-  componentDidMount () {
-    const {host, dir} = this.props.params;
-    this.getDirItem (host, dir);
+  componentDidMount() {
+    const { host, dir } = this.props.params;
+    this.getDirItem(host, dir);
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.params.vmode === this.props.params.vmode) {
       const nextHost = nextProps.params.host;
       const nextDir = nextProps.params.dir;
@@ -36,54 +36,59 @@ class FileController extends React.Component {
         nextHost !== this.props.params.host ||
         nextDir !== this.props.params.dir
       ) {
-        this.getDirItem (nextHost, nextDir);
+        this.getDirItem(nextHost, nextDir);
       }
     }
   }
 
-  getDirItem (host, path) {
+  getDirItem(host, path) {
     if (typeof host === 'undefined' || typeof path === 'undefined') {
       return;
     }
 
-    this.setState ({
+    this.setState({
       isSpinning: true,
     });
-    Axios.get ('/api/listDir', {
+    Axios.get('/api/listDir', {
       params: {
         host,
         path,
       },
-    }).then (res => {
+    }).then(res => {
       const data = res.data.result;
-      this.setState ({
+      this.setState({
         listData: data,
         isSpinning: false,
       });
-    });
+    }).catch((err) => {
+      Modal.error({
+        title: '网络连接错误',
+        content: '请检查服务器是否开启或密钥配置',
+      })
+    })
   }
 
-  onGridClick (itemType, itemName) {
-    const {params, history} = this.props;
+  onGridClick(itemType, itemName) {
+    const { params, history } = this.props;
     let dir;
-    if (itemName.slice (0, 1) === '/') {
-      dir = params.dir.trim () + itemName;
+    if (itemName.slice(0, 1) === '/') {
+      dir = params.dir.trim() + itemName;
     } else {
-      dir = params.dir.trim () + '/' + itemName;
+      dir = params.dir.trim() + '/' + itemName;
     }
     if (itemType === 1) {
-      history.push ({
+      history.push({
         pathname: '/listdir',
-        search: querystring.stringify ({
+        search: querystring.stringify({
           host: params.host,
           dir,
           vmode: params.vmode,
         }),
       });
     } else {
-      history.push ({
+      history.push({
         pathname: '/logbrowser',
-        search: querystring.stringify ({
+        search: querystring.stringify({
           host: params.host,
           dir,
         }),
@@ -91,7 +96,7 @@ class FileController extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <Spin
         spinning={this.state.isSpinning}
@@ -105,35 +110,35 @@ class FileController extends React.Component {
           renderItem={item => (
             <List.Item
               key={item.name}
-              onClick={this.onGridClick.bind (this, item.type, item.name)}
+              onClick={this.onGridClick.bind(this, item.type, item.name)}
             >
               {this.props.params.vmode === 'list'
                 ? <List.Item.Meta
-                    avatar={
-                      item.type === 0
-                        ? <Avatar
-                            size="large"
-                            shape="square"
-                            icon="file-text"
-                          />
-                        : <Avatar
-                            size="large"
-                            shape="square"
-                            icon="folder-open"
-                          />
-                    }
-                    key={item.name}
-                    title={
-                      <span className="file-name treeNodeUnselectable">
-                        {item.name}
-                      </span>
-                    }
-                  />
+                  avatar={
+                    item.type === 0
+                      ? <Avatar
+                        size="large"
+                        shape="square"
+                        icon="file-text"
+                      />
+                      : <Avatar
+                        size="large"
+                        shape="square"
+                        icon="folder-open"
+                      />
+                  }
+                  key={item.name}
+                  title={
+                    <span className="file-name treeNodeUnselectable">
+                      {item.name}
+                    </span>
+                  }
+                />
                 : <FileCard
-                    className="file-card"
-                    title={item.name}
-                    fileType={item.type}
-                  />}
+                  className="file-card"
+                  title={item.name}
+                  fileType={item.type}
+                />}
             </List.Item>
           )}
         />
@@ -143,9 +148,9 @@ class FileController extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  params: querystring.parse (
-    state.getIn (['router', 'location', 'search']).substring (1)
+  params: querystring.parse(
+    state.getIn(['router', 'location', 'search']).substring(1)
   ),
 });
 
-export default connect (mapStateToProps, null) (FileController);
+export default connect(mapStateToProps, null)(FileController);
