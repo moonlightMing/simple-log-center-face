@@ -2,7 +2,7 @@
   "name": "simple-log-center-face",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://192.168.31.33:9090",
+  "proxy": "http://localhost:9090",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
